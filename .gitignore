@@ -10,9 +10,6 @@ Desktop.ini
 # Dependencies (not used by this static project)
 node_modules/
 
-# Local tooling artifacts accidentally created inside the project
-$HOME/
-
 # Logs and temp files
 *.log
 *.tmp

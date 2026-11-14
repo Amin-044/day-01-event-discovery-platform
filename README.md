@@ -49,7 +49,7 @@ day-01-event-discovery-platform/
 │   └── style.css
 ├── js/
 │   └── app.js
-├── images/
+├── images/                 # Event photos and the AK logo icon
 ├── screenshots/
 └── README.md
 ```
