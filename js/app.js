@@ -1,5 +1,5 @@
 /* =========================================================
-   Pulse - Event Discovery Website
+   AK - Event Discovery Website
    Event data, filters, search, favourites, modal and form
    ========================================================= */
 
@@ -140,7 +140,7 @@ let showSaved = false;
 let favorites = [];
 
 try {
-  favorites = JSON.parse(localStorage.getItem("pulseFavorites")) || [];
+  favorites = JSON.parse(localStorage.getItem("akFavorites")) || [];
 } catch (error) {
   favorites = [];
 }
@@ -176,7 +176,7 @@ const navMenu = document.getElementById("navMenu");
 // ---------- Favourites ----------
 function saveFavorites() {
   try {
-    localStorage.setItem("pulseFavorites", JSON.stringify(favorites));
+    localStorage.setItem("akFavorites", JSON.stringify(favorites));
   } catch (error) {
     // localStorage may be blocked in some browsers.
   }

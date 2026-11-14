@@ -1,13 +1,13 @@
-# Pulse — Event Discovery Website
+# AK — Event Discovery Website
 
-Pulse is a simple event discovery website made for the Day 01 frontend assignment. It helps users find concerts, conferences, workshops, sports events and more in one place.
+AK is a simple event discovery website made for the Day 01 frontend assignment. It helps users find concerts, conferences, workshops, sports events and more in one place.
 
 The website is built with only **HTML, CSS and JavaScript**. It does not need a server, database or any framework — you can open `index.html` directly in a browser.
 
-![Pulse desktop preview](screenshots/preview-desktop.jpg)
+![AK desktop preview](screenshots/preview-desktop.jpg)
 
 <p align="center">
-  <img src="screenshots/preview-mobile.jpg" alt="Pulse on mobile" width="240">
+  <img src="screenshots/preview-mobile.jpg" alt="AK on mobile" width="240">
 </p>
 
 ---
@@ -19,7 +19,7 @@ The website is built with only **HTML, CSS and JavaScript**. It does not need a 
 - **Featured Events** — 6 event cards with image, name, date, time, venue, city, category and a **View Details** button.
 - **Categories** — Technology, Music, Business, Sports, Workshops and Education. Clicking a category filters the events.
 - **Trending Now** — 3 popular events shown in a separate dark section.
-- **About section** — a short explanation of what Pulse offers.
+- **About section** — a short explanation of what AK offers.
 - **Newsletter** — an email form that checks for empty or invalid emails before showing a success message.
 - **Footer** — social links, quick links and contact details.
 
@@ -65,7 +65,7 @@ That's it — no installation or server is required. If you use VS Code, you can
 
 All event information is stored in two arrays inside `js/app.js`: `events` (6 featured events) and `trending` (3 events). JavaScript builds the cards from this data, applies the active category and search terms, and re-renders the grid.
 
-The favourite buttons save event ids in `localStorage` under the key `pulseFavorites`. The details popup is a simple hidden `<div>` that is filled with the selected event's data and shown with an `open` class.
+The favourite buttons save event ids in `localStorage` under the key `akFavorites`. The details popup is a simple hidden `<div>` that is filled with the selected event's data and shown with an `open` class.
 
 ## Note
 
