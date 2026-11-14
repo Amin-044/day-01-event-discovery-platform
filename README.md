@@ -1,142 +1,157 @@
-# Pulse — Event Discovery Platform
+# Pulse — Event Discovery Website
 
-A premium, fully responsive event discovery landing page built for **Day 01** of the frontend assignment. Pulse helps people find concerts, conferences, workshops and matches worth leaving the house for — with a curated editorial feel instead of a generic template.
+A simple, responsive event discovery website made for **Day 01** of my frontend assignment. Pulse lets you search events, browse categories, save favourites and see event details in a popup.
+
+It is a **pure static website** — HTML, CSS and JavaScript only. There is no server, database, framework or build step. You can open `index.html` directly in a browser.
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Lighthouse](https://img.shields.io/badge/Lighthouse-100%20%2F%20100%20%2F%20100-2c7a3f?style=flat-square)
 
 ---
 
 ## Preview
 
-![Pulse desktop landing page](screenshots/preview-desktop.jpg)
+### Desktop
+
+![Pulse desktop preview](screenshots/preview-desktop.jpg)
+
+### Mobile
 
 <p align="center">
-  <img src="screenshots/preview-mobile.jpg" alt="Pulse mobile landing page" width="260">
+  <img src="screenshots/preview-mobile.jpg" alt="Pulse mobile preview" width="260">
 </p>
 
-The screenshots above are the first viewport. Full-page captures are included in the repository:
+Full-page screenshots are also included:
 
-- `screenshots/desktop.jpg` — full desktop page (light)
-- `screenshots/desktop-dark.jpg` — full desktop page (dark mode)
+- `screenshots/desktop.jpg` — full desktop page (1440 px)
 - `screenshots/mobile.jpg` — full mobile page (390 px)
 
 ---
 
-## Overview
+## About the project
 
-Pulse is a single-page event discovery experience: a bold editorial hero, a searchable event grid, browsable categories, a live countdown, an about section and a validated newsletter signup. Everything is built with semantic HTML, modern CSS and dependency-free JavaScript — no frameworks, no build step.
+Pulse is a single-page website with these sections:
 
-**Design direction:** warm cream canvas, near-black ink, electric-lime accents and a coral highlight, paired with Bricolage Grotesque, Instrument Serif and Manrope. Ticket stubs, rotated stickers and a marquee ticker give it a physical, printed-poster personality.
+1. Sticky navigation bar
+2. Hero section with a search form
+3. Featured events grid
+4. Browse by category
+5. Trending events
+6. About section
+7. Newsletter signup
+8. Footer
+
+All event cards are created with JavaScript from an array of event objects, so the page is not just repeated HTML.
 
 ---
 
 ## Features
 
-### Core requirements
-
-- **Sticky header** with Home, Explore Events, Categories, About, Log in and a “Get started” CTA. Links smooth-scroll to real sections and the active link updates on scroll.
-- **Responsive mobile navigation** — full-screen drawer with numbered links, scroll lock, Escape-to-close and focus management.
-- **Hero section** with headline, supporting copy, dual search (event name + city/venue) and a primary CTA.
-- **9 featured event cards** (requirement: at least 6), each with image, name, date, time, venue, city, category badge, price and a **View details** action.
-- **Category filtering** across 7 chips (All + 6 categories). The six category tiles below also filter the grid and scroll to it.
-- **Live event-name search** (debounced) plus location search, combinable with the active category.
-- **6 category cards** — Technology, Music, Business, Sports, Workshops, Education — with per-category counts.
-- **3 distinct trending cards** with rank, badge, category, date, city and price, each opening the same details view.
-- **Newsletter form** with real validation: empty and malformed emails show inline errors; a valid email swaps the form for a success state.
-- **Footer** with social links, quick links, contact details, legal links and back-to-top.
-- **Empty state** with a one-click “Clear filters” recovery action and a live results counter.
-
-### Bonus features
-
-- **Live countdown** to the next headline event (days / hours / minutes / seconds, updates every second).
-- **Light / dark theme** toggle that follows the OS preference on first visit, remembers the user’s choice and avoids a flash of the wrong theme.
-- **Event details popup** using the native `<dialog>` element, with image, description, date/time, venue, entry price, reserve action and save toggle.
-- **Favorites / shortlist** stored in `localStorage`, with a Saved filter, live count, pop animation and toast feedback.
-- **Polished motion** — scroll-reveal, marquee ticker, hover states, rotating badges — all disabled under `prefers-reduced-motion`.
-- **Accessibility** — skip link, landmarks, labelled controls, visible focus rings, ARIA live regions, keyboard-dismissable modal and AA-contrast text.
+- **Navigation** — Home, Events, Categories, About, Login and Get Started. All section links scroll to the correct part of the page.
+- **Mobile menu** — on small screens the links move into a hamburger menu.
+- **Hero search** — search by event name and by city/venue. Both fields work together.
+- **6 featured event cards** — each card has an image, name, date, time, venue, city, category and a **View Details** button.
+- **Category filtering** — All, Technology, Music, Business, Sports, Workshops, Education.
+- **Category cards** — clicking one filters the event grid and scrolls to it.
+- **3 trending cards** — ranked list with a different dark style.
+- **Favourites** — the heart button saves an event in `localStorage`, and the **Saved** filter shows only saved events.
+- **Event details popup** — shows the event image, description, date, location and price. Close it with the X button, by clicking the dark background, or with the Escape key.
+- **Newsletter validation** — empty and invalid emails show an error; a valid email shows a success message.
+- **Empty state** — if nothing matches a search, a message and a **Clear Filters** button appear.
+- **Responsive layout** — works on desktop, tablet and mobile using Flexbox, CSS Grid and media queries.
 
 ---
 
-## Tech stack
-
-| Layer | Choice |
-| --- | --- |
-| Markup | Semantic HTML5, inline SVG icons, native `<dialog>` |
-| Styling | CSS3 — custom properties, Flexbox, Grid, `clamp()`, `color-mix()`, container-free responsive layout |
-| Behaviour | Vanilla JavaScript (ES6+) — DOM rendering, event delegation, `IntersectionObserver`, `localStorage` |
-| Type | Bricolage Grotesque, Instrument Serif, Manrope via Google Fonts |
-| Imagery | 15 local photographs in `images/` |
-
-No packages, bundlers or frameworks are required.
-
----
-
-## Project structure
+## Folder structure
 
 ```text
 day-01-event-discovery-platform/
-├── index.html                 # Semantic page structure, SVGs, modal, footer
+├── index.html              # All page sections
 ├── css/
-│   └── style.css              # Design tokens, themes, layout, components, responsive rules
+│   └── style.css           # Styling and media queries
 ├── js/
-│   └── app.js                 # Data, rendering, filtering, favorites, modal, validation
-├── images/                    # 15 local event/hero photographs
+│   └── app.js              # Event data and all JavaScript
+├── images/                 # 11 local event photos
 ├── screenshots/
-│   ├── desktop.jpg            # Full-page desktop (light)
-│   ├── desktop-dark.jpg       # Full-page desktop (dark)
-│   ├── mobile.jpg             # Full-page mobile (390 px)
-│   ├── preview-desktop.jpg    # First-viewport crop used above
-│   └── preview-mobile.jpg     # First-viewport crop used above
+│   ├── desktop.jpg         # Full desktop page
+│   ├── mobile.jpg          # Full mobile page
+│   ├── preview-desktop.jpg # Desktop preview
+│   └── preview-mobile.jpg  # Mobile preview
 └── README.md
 ```
 
-> When publishing, name the repository **`day-01-event-discovery-platform`** to match the submission brief.
+> For submission, name the project folder **`day-01-event-discovery-platform`**.
 
 ---
 
-## Run locally
+## How to run
 
-The site is fully static, so any static server works.
+### Option 1 — open the file
+
+Double-click `index.html`, or right-click it and choose **Open with → Google Chrome**.
+
+Everything works from the filesystem (`file://`), including filters, favourites and the popup. The only thing that needs internet is the Poppins font from Google Fonts; without internet it falls back to Arial.
+
+### Option 2 — Live Server
+
+Open the folder in VS Code, right-click `index.html` and choose **Open with Live Server**.
+
+### Option 3 — any static server
 
 ```bash
-# from the project folder
 python -m http.server 5500
 ```
 
 Then open <http://localhost:5500>.
 
-Alternatively, open the folder in VS Code and use the **Live Server** extension, or double-click `index.html` (all features work from the filesystem too).
-
 ---
 
 ## How it works
 
-### Data-driven cards
+### 1. Event data
 
-`js/app.js` holds two arrays — `EVENTS` (9 items) and `TRENDING` (3 items) — each with an id, title, category, date, venue, city, price, image and description. Cards, filter chips and trending cards are rendered from this data at boot, so adding an event is a one-object change. Event dates are generated relative to “today”, which keeps the countdown and the “upcoming” copy fresh whenever the demo is opened.
+`js/app.js` starts with two arrays:
 
-### Filtering & search
+- `events` — the 6 featured events (`e1`–`e6`)
+- `trending` — the 3 trending events (`t1`–`t3`)
 
-A single `state` object tracks `category`, `query`, `location`, `savedOnly` and the favorites set. `getFilteredEvents()` applies each condition in sequence and returns the visible list; one render function updates the grid, the empty state, the results count, the chips and the saved counter. Search input is debounced at 220 ms, and submitting the hero form clears the category so the search stays global.
+Each object stores an id, title, category, date, time, venue, location, price, image and description. To add a new event, I only add one object to the array.
 
-### Favorites
+### 2. Rendering
 
-Favorites are a `Set` mirrored to `localStorage` under `pulse-favorites`. Because the grid re-renders, clicks are handled by event delegation on the grid containers. Toggling a favorite updates every matching button, the modal state, the saved count and shows a toast. Invalid or stale ids are filtered out on load.
+`renderEvents()` filters the `events` array and builds the cards with template strings. `renderTrending()` does the same for the trending section. The HTML already contains the section containers; JavaScript fills them in.
 
-### Event modal
+### 3. Filtering and search
 
-Details open in a native `<dialog>` via `showModal()`, which gives focus trapping and backdrop behaviour for free. The page scroll is locked while it is open. Some embedded Chromium builds do not dispatch the native `close`/`cancel` events reliably, so the implementation also releases the lock directly on close, listens for **Escape** explicitly and watches the dialog’s `open` attribute with a `MutationObserver`.
+The page keeps four pieces of state:
 
-### Theme
+```js
+let currentCategory = "all";
+let searchTerm = "";
+let locationTerm = "";
+let showSaved = false;
+```
 
-An inline script in `<head>` applies the saved theme (or the OS preference) before first paint. The toggle persists the choice under `pulse-theme`. All colours are custom properties, so both themes share the same component styles.
+`getFilteredEvents()` checks the category, the search text, the location and the saved-only state. The same function is used by the filter buttons, the search form and the category cards, so there is only one filtering path.
 
-### Validation
+### 4. Favourites
 
-The newsletter field is validated on submit with a pragmatic email pattern. Errors set `aria-invalid`, show a message in a live region and add a shake animation; typing clears the error. A valid address replaces the form with a confirmation panel that echoes the address.
+Favourites are stored as an array of event ids under the `localStorage` key `pulseFavorites`. Heart clicks are handled with event delegation on the document, so buttons still work after the grid is re-rendered.
+
+### 5. Event popup
+
+The popup is a normal `<div class="modal">` overlay, not a separate page. `openModal(id)` finds the event in the combined array, fills the popup fields and adds an `open` class. The body scroll is locked while it is open.
+
+### 6. Form validation
+
+The newsletter form uses a simple regular expression:
+
+```js
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+```
+
+It checks for an empty field first, then the pattern, and finally shows a success message and resets the form.
 
 ---
 
@@ -144,73 +159,68 @@ The newsletter field is validated on submit with a pragmatic email pattern. Erro
 
 | Width | Layout |
 | --- | --- |
-| > 1120 px | Two-column hero, 3-column event/category/trending grids, 4-column footer |
-| ≤ 1120 px | Hero stacks to one column so the search fields stay comfortable |
-| ≤ 980 px | Desktop nav becomes a hamburger menu; grids drop to 2 columns |
-| ≤ 860 px | Trending cards become a single column; countdown goes full-width |
-| ≤ 720 px | Single-column event cards, stacked search panel, reduced spacing, 2-column categories |
-| ≤ 480 px | Single-column categories, compact hero, simplified footer |
+| Above 992 px | 3-column event, category and trending grids; 4-column footer |
+| 992 px and below | Grids become 2 columns; footer becomes 2 columns |
+| 900 px and below | Hero stacks into one column |
+| 768 px and below | Navigation becomes a hamburger menu; search fields stack; trending is 1 column |
+| 576 px and below | Event cards become 1 column; newsletter stacks; footer becomes 1 column |
+| 400 px and below | Category cards become 1 column |
 
-The page was audited at **1440, 1280, 1100, 1024, 980, 900, 820, 768, 720, 600, 480, 390 and 360 px** — zero horizontal overflow at every width.
-
----
-
-## Quality checks
-
-- **Lighthouse (local build):** Accessibility **100**, Best Practices **100**, SEO **100**.
-- **Console:** no errors during load or interaction tests.
-- **Functional tests:** category filters, combined search, location search, reset and empty state, favorites persistence, saved-only filter, modal open/close/save/reserve, newsletter empty/invalid/success, theme persistence, mobile drawer state.
-- **Images:** all 15 local photos verified and included in the full-page captures.
-- **Keyboard:** skip link, visible focus styles, Escape closes the modal and mobile menu.
+I checked the page at **1440, 1280, 1100, 1024, 980, 900, 820, 768, 720, 600, 480, 390 and 360 px** and there was no horizontal scrolling at any width.
 
 ---
 
-## Challenge & solution
+## Testing
 
-**Challenge 1 — the hero broke between tablet and desktop.** At roughly 1000–1100 px the two-column hero squeezed the “What” and “Where” search fields down to ~127 px, making them awkward to use.  
-**Solution:** move the hero’s stacking breakpoint up to 1120 px, while leaving the navigation and card grids at their own breakpoints. The search panel now always has room to breathe, and the single-column hero reads well on tablets.
+What I tested in the browser:
 
-**Challenge 2 — the modal left the page scroll-locked.** The native dialog closed visually, but its `close` event did not fire in the embedded Chromium test environment, so `body { overflow: hidden }` stayed behind.  
-**Solution:** release the lock in the close handler, add an explicit Escape listener, and observe the dialog’s `open` attribute as a final fallback. Closing by button, backdrop or keyboard now always restores scrolling.
-
-**Challenge 3 — full-page screenshots had missing images.** Lazy-loaded images below the fold never entered the capture viewport.  
-**Solution:** the capture script sets every image to eager loading, scrolls the full page, waits for `document.fonts.ready` and each image’s load/error event, then captures beyond the viewport.
+- All 6 event cards and 3 trending cards appear on load.
+- Category buttons show only the matching events.
+- Searching an event name works (for example, `neon`).
+- Searching a city/venue works (for example, `london`).
+- Favourites are saved after reload and the Saved filter works.
+- The details popup opens for both featured and trending events and closes correctly.
+- Newsletter shows separate messages for an empty email, an invalid email and a valid email.
+- The mobile menu opens and closes at 390 px.
+- All 11 images load with no broken links.
+- No JavaScript console errors.
+- The whole site also works when opened directly with `file://` (no server).
 
 ---
 
 ## What I learned
 
-- How to structure a multi-section landing page around a small design system (tokens, spacing scale, type scale) instead of one-off styles.
-- Building a filter pipeline that composes category, text, location and saved-state conditions without duplicating render logic.
-- Using event delegation to keep dynamically rendered cards interactive across re-renders.
-- The practical differences between `hidden`, `display: none` and the `hidden` attribute inside grids and dialogs.
-- How localStorage, system theme preferences and pre-paint scripts fit together to avoid flicker.
-- Why testing intermediate breakpoints — not just “desktop” and “mobile” — matters for a genuinely responsive result.
-- How native `<dialog>` behaves across engines, and how to add resilient fallbacks without giving up its accessibility benefits.
+- How to render cards from a JavaScript array instead of writing every card in HTML.
+- How to combine several filter conditions in one function.
+- How CSS Grid and Flexbox can be used together for page sections and card layouts.
+- How media queries change the same layout for tablet and mobile.
+- How `localStorage` can keep small pieces of data after a page refresh.
+- How event delegation keeps dynamic buttons working after re-rendering.
+- How to validate an email address with JavaScript before submitting a form.
 
 ---
 
 ## Credits
 
-- **Fonts:** [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque), [Instrument Serif](https://fonts.google.com/specimen/Instrument+Serif) and [Manrope](https://fonts.google.com/specimen/Manrope) via Google Fonts.
-- **Photography:** sourced from [Unsplash](https://unsplash.com) for demo purposes and stored locally in `images/`.
-- **Design & code:** original work for the Day 01 assignment. All event names, venues, prices and copy are fictional.
+- **Font:** [Poppins](https://fonts.google.com/specimen/Poppins) from Google Fonts.
+- **Images:** demo event photos stored locally in the `images/` folder.
+- **Code and design:** original work for the Day 01 assignment. All event names, venues and prices are fictional.
 
 ---
 
 ## Submission checklist
 
-- [x] Header navigation with working section links and Login / Get started actions
-- [x] Hero with event-name and location search plus CTA
-- [x] 9 featured event cards with image, name, date, time, location and category
-- [x] 6 category cards and working category filtering
-- [x] Functional event-name search
-- [x] 3 distinct trending event cards
-- [x] Newsletter with email validation
+- [x] Navigation with Home, Events, Categories, About, Login and Get Started
+- [x] Hero with event-name and location search
+- [x] 6+ featured event cards with image, name, date, time, location and category
+- [x] View Details button on every event card
+- [x] 6 categories with working filtering
+- [x] Working event-name search
+- [x] 3 distinct trending cards
+- [x] Newsletter form with email validation
 - [x] Footer with social links, quick links and contact details
-- [x] Flexbox + CSS Grid, responsive media queries
+- [x] Flexbox and CSS Grid used in the layout
+- [x] Responsive media queries for desktop, tablet and mobile
 - [x] JavaScript DOM manipulation and event handling
-- [x] Desktop and mobile screenshots
-- [x] README with setup, features, challenge/solution and learnings
-- [ ] Publish the repository as `day-01-event-discovery-platform`
-- [ ] Add the live demo URL after deployment
+- [x] Desktop and mobile screenshots included
+- [x] Works without a server by opening `index.html`
