@@ -138,6 +138,7 @@ let searchTerm = "";
 let locationTerm = "";
 let showSaved = false;
 let favorites = [];
+let currentEventId = null;
 
 try {
   favorites = JSON.parse(localStorage.getItem("akFavorites")) || [];
@@ -165,6 +166,32 @@ const modalLocation = document.getElementById("modalLocation");
 const modalPrice = document.getElementById("modalPrice");
 const modalClose = document.getElementById("modalClose");
 const modalRegister = document.getElementById("modalRegister");
+
+const eventDetails = document.getElementById("eventDetails");
+const registerPanel = document.getElementById("registerPanel");
+const backToDetails = document.getElementById("backToDetails");
+const regEventTitle = document.getElementById("regEventTitle");
+const regEventInfo = document.getElementById("regEventInfo");
+const registerForm = document.getElementById("registerForm");
+const registerSuccess = document.getElementById("registerSuccess");
+const successEvent = document.getElementById("successEvent");
+const successNote = document.getElementById("successNote");
+const registerDone = document.getElementById("registerDone");
+const regName = document.getElementById("regName");
+const regEmail = document.getElementById("regEmail");
+const regPhone = document.getElementById("regPhone");
+const regTickets = document.getElementById("regTickets");
+const regNameError = document.getElementById("regNameError");
+const regEmailError = document.getElementById("regEmailError");
+const regPhoneError = document.getElementById("regPhoneError");
+const regTicketsError = document.getElementById("regTicketsError");
+
+const registerFields = [
+  { input: regName, error: regNameError },
+  { input: regEmail, error: regEmailError },
+  { input: regPhone, error: regPhoneError },
+  { input: regTickets, error: regTicketsError }
+];
 
 const newsletterForm = document.getElementById("newsletterForm");
 const emailInput = document.getElementById("emailInput");
@@ -300,6 +327,19 @@ function renderTrending() {
 }
 
 // ---------- Modal ----------
+function resetModal() {
+  eventDetails.hidden = false;
+  registerPanel.hidden = true;
+  registerSuccess.hidden = true;
+  registerForm.hidden = false;
+  registerForm.reset();
+  modal.setAttribute("aria-labelledby", "modalTitle");
+
+  registerFields.forEach(function (field) {
+    setFieldError(field.input, field.error, "");
+  });
+}
+
 function openModal(id) {
   const event = allEvents.find(function (item) {
     return item.id === id;
@@ -308,6 +348,9 @@ function openModal(id) {
   if (!event) {
     return;
   }
+
+  currentEventId = event.id;
+  resetModal();
 
   modalImg.src = event.image;
   modalImg.alt = event.title;
@@ -326,6 +369,90 @@ function openModal(id) {
 function closeModal() {
   modal.classList.remove("open");
   document.body.style.overflow = "";
+  currentEventId = null;
+  resetModal();
+}
+
+function openRegisterPanel() {
+  const event = allEvents.find(function (item) {
+    return item.id === currentEventId;
+  });
+
+  if (!event) {
+    return;
+  }
+
+  eventDetails.hidden = true;
+  registerPanel.hidden = false;
+  registerSuccess.hidden = true;
+  registerForm.hidden = false;
+  registerForm.reset();
+
+  regEventTitle.textContent = event.title;
+  regEventInfo.textContent =
+    event.date + " · " + event.venue + ", " + event.location + " · Entry: " + event.price;
+
+  modal.setAttribute("aria-labelledby", "registerTitle");
+  regName.focus();
+}
+
+function closeRegisterPanel() {
+  eventDetails.hidden = false;
+  registerPanel.hidden = true;
+  modal.setAttribute("aria-labelledby", "modalTitle");
+}
+
+// ---------- Registration validation ----------
+function validateName(value) {
+  const name = value.trim();
+
+  if (name.length < 3 || !/^[A-Za-z ]+$/.test(name)) {
+    return "Enter your full name using letters only.";
+  }
+
+  return "";
+}
+
+function validateEmail(value) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+    return "Enter a valid email address.";
+  }
+
+  return "";
+}
+
+function validatePhone(value) {
+  let digits = value.replace(/[\s\-()]/g, "");
+
+  if (digits.indexOf("+91") === 0) {
+    digits = digits.slice(3);
+  }
+
+  if (digits.indexOf("0") === 0) {
+    digits = digits.slice(1);
+  }
+
+  if (!/^[6-9][0-9]{9}$/.test(digits)) {
+    return "Enter a valid 10-digit mobile number starting with 6-9.";
+  }
+
+  return "";
+}
+
+function validateTickets(value) {
+  const count = Number(value);
+
+  if (!Number.isInteger(count) || count < 1 || count > 5) {
+    return "Choose between 1 and 5 tickets.";
+  }
+
+  return "";
+}
+
+function setFieldError(input, errorElement, message) {
+  input.classList.toggle("input-error", Boolean(message));
+  input.setAttribute("aria-invalid", message ? "true" : "false");
+  errorElement.textContent = message;
 }
 
 // ---------- Event listeners ----------
@@ -407,9 +534,54 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-modalRegister.addEventListener("click", function () {
-  alert("Registration successful! This is a demo website.");
-  closeModal();
+modalRegister.addEventListener("click", openRegisterPanel);
+backToDetails.addEventListener("click", closeRegisterPanel);
+registerDone.addEventListener("click", closeModal);
+
+registerFields.forEach(function (field) {
+  field.input.addEventListener("input", function () {
+    setFieldError(field.input, field.error, "");
+  });
+});
+
+registerForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const nameError = validateName(regName.value);
+  const emailError = validateEmail(regEmail.value);
+  const phoneError = validatePhone(regPhone.value);
+  const ticketsError = validateTickets(regTickets.value);
+
+  setFieldError(regName, regNameError, nameError);
+  setFieldError(regEmail, regEmailError, emailError);
+  setFieldError(regPhone, regPhoneError, phoneError);
+  setFieldError(regTickets, regTicketsError, ticketsError);
+
+  if (nameError || emailError || phoneError || ticketsError) {
+    const firstInvalid = nameError
+      ? regName
+      : emailError
+      ? regEmail
+      : phoneError
+      ? regPhone
+      : regTickets;
+
+    firstInvalid.focus();
+    return;
+  }
+
+  const selectedEvent = allEvents.find(function (item) {
+    return item.id === currentEventId;
+  });
+  const ticketCount = Number(regTickets.value);
+  const ticketText = ticketCount === 1 ? "1 ticket" : ticketCount + " tickets";
+
+  successEvent.textContent = selectedEvent ? selectedEvent.title : "your event";
+  successNote.textContent = ticketText + " · Confirmation sent to " + regEmail.value.trim();
+
+  registerForm.hidden = true;
+  registerSuccess.hidden = false;
+  registerDone.focus();
 });
 
 // ---------- Newsletter ----------

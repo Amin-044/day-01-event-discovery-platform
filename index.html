@@ -197,10 +197,10 @@
       </a>
         <p>Discover and book the best events happening around you.</p>
         <div class="socials">
-          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://twitter.com" target="_blank" rel="noopener">Twitter</a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+          <p>Twitter</p>
+          <p>LinkedIn</p>
+          <p>YouTube</p>
+          <p>Instagram</p>
         </div>
       </div>
 
@@ -228,9 +228,9 @@
 
       <div>
         <h3>Contact</h3>
-        <p>✉ hello@ak.events</p>
-        <p>📞 +91 98765 43210</p>
-        <p>📍 88 MG Road,<br>Bengaluru, Karnataka</p>
+        <p>✉ akevents@gmail.com</p>
+        <p>📞 +91 84018 50015</p>
+        <p>📍 Alpha Arcade,<br>Bharuch, Gujarat</p>
       </div>
     </div>
 
@@ -245,15 +245,63 @@
       <button class="modal-close" id="modalClose" type="button" aria-label="Close details">✕</button>
       <img id="modalImg" src="images/event-music.jpg" alt="">
       <div class="modal-body">
-        <span class="category-badge modal-badge" id="modalCategory"></span>
-        <h2 id="modalTitle"></h2>
-        <p id="modalDesc"></p>
-        <ul class="modal-info">
-          <li><strong>Date:</strong> <span id="modalDate"></span></li>
-          <li><strong>Location:</strong> <span id="modalLocation"></span></li>
-          <li><strong>Entry:</strong> <span id="modalPrice"></span></li>
-        </ul>
-        <button class="btn" id="modalRegister" type="button">Register Now</button>
+        <div id="eventDetails">
+          <span class="category-badge modal-badge" id="modalCategory"></span>
+          <h2 id="modalTitle"></h2>
+          <p id="modalDesc"></p>
+          <ul class="modal-info">
+            <li><strong>Date:</strong> <span id="modalDate"></span></li>
+            <li><strong>Location:</strong> <span id="modalLocation"></span></li>
+            <li><strong>Entry:</strong> <span id="modalPrice"></span></li>
+          </ul>
+          <button class="btn" id="modalRegister" type="button">Register Now</button>
+        </div>
+
+        <div id="registerPanel" hidden>
+          <button class="back-btn" id="backToDetails" type="button">← Back to event</button>
+          <h2 id="registerTitle">Register for <span id="regEventTitle"></span></h2>
+          <p class="reg-event-info" id="regEventInfo"></p>
+
+          <form id="registerForm" novalidate>
+            <div class="form-group">
+              <label for="regName">Full name</label>
+              <input type="text" id="regName" placeholder="e.g. Aarav Sharma" autocomplete="name" aria-describedby="regNameError">
+              <span class="field-error" id="regNameError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="regEmail">Email address</label>
+              <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email" aria-describedby="regEmailError">
+              <span class="field-error" id="regEmailError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="regPhone">Mobile number</label>
+              <input type="tel" id="regPhone" placeholder="10-digit mobile number" autocomplete="tel" aria-describedby="regPhoneError">
+              <span class="field-error" id="regPhoneError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="regTickets">Number of tickets</label>
+              <select id="regTickets" aria-describedby="regTicketsError">
+                <option value="1">1 ticket</option>
+                <option value="2">2 tickets</option>
+                <option value="3">3 tickets</option>
+                <option value="4">4 tickets</option>
+                <option value="5">5 tickets</option>
+              </select>
+              <span class="field-error" id="regTicketsError"></span>
+            </div>
+
+            <button class="btn btn-full" type="submit">Confirm Registration</button>
+          </form>
+
+          <div class="register-success" id="registerSuccess" hidden>
+            <p>✅ Registration confirmed for <strong id="successEvent"></strong>.</p>
+            <p class="reg-success-note" id="successNote"></p>
+            <button class="btn" id="registerDone" type="button">Done</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
