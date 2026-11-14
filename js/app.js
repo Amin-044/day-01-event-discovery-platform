@@ -11,9 +11,9 @@ const events = [
     category: "Technology",
     date: "20 Dec 2026",
     time: "10:00 AM",
-    venue: "Moscone Center",
-    location: "San Francisco, CA",
-    price: "$249",
+    venue: "Bengaluru International Exhibition Centre",
+    location: "Bengaluru, Karnataka",
+    price: "₹2,499",
     image: "images/event-tech.jpg",
     description:
       "A full-day summit with talks on artificial intelligence, web development and the future of technology. Meet founders, developers and students from across the country."
@@ -24,9 +24,9 @@ const events = [
     category: "Music",
     date: "28 Dec 2026",
     time: "7:00 PM",
-    venue: "Skyline Amphitheatre",
-    location: "Los Angeles, CA",
-    price: "$89",
+    venue: "MMRDA Grounds",
+    location: "Mumbai, Maharashtra",
+    price: "₹1,499",
     image: "images/event-music.jpg",
     description:
       "An open-air night of live music, lights and food trucks. Featuring local bands, DJs and a headline performance to close the evening."
@@ -37,9 +37,9 @@ const events = [
     category: "Business",
     date: "5 Jan 2027",
     time: "6:30 PM",
-    venue: "The Grand Hall",
-    location: "New York, NY",
-    price: "$120",
+    venue: "T-Hub Auditorium",
+    location: "Hyderabad, Telangana",
+    price: "₹999",
     image: "images/event-startup.jpg",
     description:
       "A networking evening for founders, investors and students interested in startups. Short talks followed by open networking and refreshments."
@@ -50,9 +50,9 @@ const events = [
     category: "Sports",
     date: "12 Jan 2027",
     time: "6:00 AM",
-    venue: "Riverside Park",
-    location: "Chicago, IL",
-    price: "$35",
+    venue: "Marine Drive",
+    location: "Mumbai, Maharashtra",
+    price: "₹499",
     image: "images/event-sports.jpg",
     description:
       "Run 21 kilometres through the city with water stations and cheering points along the route. Finishers receive a medal and a free breakfast."
@@ -63,8 +63,8 @@ const events = [
     category: "Workshops",
     date: "18 Jan 2027",
     time: "11:00 AM",
-    venue: "Studio 14",
-    location: "Austin, TX",
+    venue: "91springboard",
+    location: "Pune, Maharashtra",
     price: "Free",
     image: "images/event-workshop.jpg",
     description:
@@ -76,9 +76,9 @@ const events = [
     category: "Education",
     date: "25 Jan 2027",
     time: "9:00 AM",
-    venue: "Oxford Union",
-    location: "London, UK",
-    price: "$75",
+    venue: "India Habitat Centre",
+    location: "New Delhi, Delhi",
+    price: "₹799",
     image: "images/event-education.jpg",
     description:
       "Teachers, students and researchers discuss new ways of learning, online education and the role of technology in the classroom."
@@ -92,9 +92,9 @@ const trending = [
     category: "Music",
     date: "14 Feb 2027",
     time: "4:00 PM",
-    venue: "Parque das Nações",
-    location: "Lisbon, Portugal",
-    price: "€199",
+    venue: "Mahalaxmi Racecourse",
+    location: "Mumbai, Maharashtra",
+    price: "₹2,499",
     attendees: "8.6k going",
     image: "images/event-festival.jpg",
     description:
@@ -106,9 +106,9 @@ const trending = [
     category: "Technology",
     date: "2 Mar 2027",
     time: "10:00 AM",
-    venue: "World Trade Centre",
-    location: "Dubai, UAE",
-    price: "$320",
+    venue: "Hyderabad International Convention Centre",
+    location: "Hyderabad, Telangana",
+    price: "₹3,999",
     attendees: "5.1k going",
     image: "images/event-summit.jpg",
     description:
@@ -120,9 +120,9 @@ const trending = [
     category: "Business",
     date: "20 Mar 2027",
     time: "11:00 AM",
-    venue: "Kraftwerk Berlin",
-    location: "Berlin, Germany",
-    price: "€140",
+    venue: "The Leela Palace",
+    location: "Bengaluru, Karnataka",
+    price: "₹1,499",
     attendees: "4.3k going",
     image: "images/event-creator.jpg",
     description:
