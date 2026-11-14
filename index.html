@@ -30,7 +30,7 @@
         </ul>
         <div class="nav-buttons">
           <button class="btn btn-outline" id="loginBtn" type="button">Login</button>
-          <a href="#events" class="btn">Get Started</a>
+          <button class="btn" id="signupBtn" type="button">Get Started</button>
         </div>
       </div>
 
@@ -301,6 +301,79 @@
             <p class="reg-success-note" id="successNote"></p>
             <button class="btn" id="registerDone" type="button">Done</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= LOGIN / SIGNUP MODAL ================= -->
+  <div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-box auth-box">
+      <button class="modal-close" id="authClose" type="button" aria-label="Close login">✕</button>
+      <div class="modal-body">
+        <img src="images/logo.svg" alt="" class="auth-logo">
+
+        <div id="loginPanel">
+          <h2 id="authTitle">Welcome back</h2>
+          <p class="auth-subtitle">Log in to your AK account.</p>
+
+          <form id="loginForm" novalidate>
+            <div class="form-group">
+              <label for="loginEmail">Email address</label>
+              <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" aria-describedby="loginEmailError">
+              <span class="field-error" id="loginEmailError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <input type="password" id="loginPassword" placeholder="At least 6 characters" autocomplete="current-password" aria-describedby="loginPasswordError">
+              <span class="field-error" id="loginPasswordError"></span>
+            </div>
+
+            <button class="btn btn-full" type="submit">Log In</button>
+          </form>
+
+          <p class="auth-switch">New here? <button class="link-btn" id="showSignup" type="button">Create an account</button></p>
+        </div>
+
+        <div id="signupPanel" hidden>
+          <h2 id="signupTitle">Create your account</h2>
+          <p class="auth-subtitle">Sign up to save events and register faster.</p>
+
+          <form id="signupForm" novalidate>
+            <div class="form-group">
+              <label for="signupName">Full name</label>
+              <input type="text" id="signupName" placeholder="e.g. Aarav Sharma" autocomplete="name" aria-describedby="signupNameError">
+              <span class="field-error" id="signupNameError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="signupEmail">Email address</label>
+              <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" aria-describedby="signupEmailError">
+              <span class="field-error" id="signupEmailError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="signupPassword">Password</label>
+              <input type="password" id="signupPassword" placeholder="At least 6 characters" autocomplete="new-password" aria-describedby="signupPasswordError">
+              <span class="field-error" id="signupPasswordError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="signupConfirm">Confirm password</label>
+              <input type="password" id="signupConfirm" placeholder="Re-enter your password" autocomplete="new-password" aria-describedby="signupConfirmError">
+              <span class="field-error" id="signupConfirmError"></span>
+            </div>
+
+            <button class="btn btn-full" type="submit">Create Account</button>
+          </form>
+
+          <p class="auth-switch">Already have an account? <button class="link-btn" id="showLogin" type="button">Log in</button></p>
+        </div>
+
+        <div class="register-success" id="authSuccess" hidden>
+          <p id="authSuccessText"></p>
+          <button class="btn" id="authDone" type="button">Continue</button>
         </div>
       </div>
     </div>

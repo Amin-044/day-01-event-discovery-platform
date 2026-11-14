@@ -139,11 +139,18 @@ let locationTerm = "";
 let showSaved = false;
 let favorites = [];
 let currentEventId = null;
+let currentUser = null;
 
 try {
   favorites = JSON.parse(localStorage.getItem("akFavorites")) || [];
 } catch (error) {
   favorites = [];
+}
+
+try {
+  currentUser = JSON.parse(localStorage.getItem("akUser")) || null;
+} catch (error) {
+  currentUser = null;
 }
 
 // ---------- Elements ----------
@@ -199,6 +206,47 @@ const newsletterMsg = document.getElementById("newsletterMsg");
 
 const menuBtn = document.getElementById("menuBtn");
 const navMenu = document.getElementById("navMenu");
+
+const loginBtn = document.getElementById("loginBtn");
+const signupBtn = document.getElementById("signupBtn");
+
+const authModal = document.getElementById("authModal");
+const authClose = document.getElementById("authClose");
+const loginPanel = document.getElementById("loginPanel");
+const signupPanel = document.getElementById("signupPanel");
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginEmailError = document.getElementById("loginEmailError");
+const loginPasswordError = document.getElementById("loginPasswordError");
+const signupName = document.getElementById("signupName");
+const signupEmail = document.getElementById("signupEmail");
+const signupPassword = document.getElementById("signupPassword");
+const signupConfirm = document.getElementById("signupConfirm");
+const signupNameError = document.getElementById("signupNameError");
+const signupEmailError = document.getElementById("signupEmailError");
+const signupPasswordError = document.getElementById("signupPasswordError");
+const signupConfirmError = document.getElementById("signupConfirmError");
+const showSignup = document.getElementById("showSignup");
+const showLogin = document.getElementById("showLogin");
+const authSuccess = document.getElementById("authSuccess");
+const authSuccessText = document.getElementById("authSuccessText");
+const authDone = document.getElementById("authDone");
+
+const loginFields = [
+  { input: loginEmail, error: loginEmailError },
+  { input: loginPassword, error: loginPasswordError }
+];
+
+const signupFields = [
+  { input: signupName, error: signupNameError },
+  { input: signupEmail, error: signupEmailError },
+  { input: signupPassword, error: signupPasswordError },
+  { input: signupConfirm, error: signupConfirmError }
+];
+
+const authFields = loginFields.concat(signupFields);
 
 // ---------- Favourites ----------
 function saveFavorites() {
@@ -455,6 +503,111 @@ function setFieldError(input, errorElement, message) {
   errorElement.textContent = message;
 }
 
+// ---------- Login / Signup ----------
+function validatePassword(value) {
+  if (value.length < 6) {
+    return "Password must be at least 6 characters.";
+  }
+
+  return "";
+}
+
+function validateConfirmPassword(value) {
+  if (value === "") {
+    return "Please confirm your password.";
+  }
+
+  if (value !== signupPassword.value) {
+    return "Passwords do not match.";
+  }
+
+  return "";
+}
+
+function updateAuthUI() {
+  if (currentUser) {
+    loginBtn.textContent = "Logout";
+    loginBtn.setAttribute("aria-label", "Log out " + currentUser.name);
+  } else {
+    loginBtn.textContent = "Login";
+    loginBtn.setAttribute("aria-label", "Log in");
+  }
+}
+
+function saveUser(user) {
+  currentUser = user;
+
+  try {
+    localStorage.setItem("akUser", JSON.stringify(user));
+  } catch (error) {
+    // localStorage may be blocked in some browsers.
+  }
+
+  updateAuthUI();
+}
+
+function clearUser() {
+  currentUser = null;
+
+  try {
+    localStorage.removeItem("akUser");
+  } catch (error) {
+    // localStorage may be blocked in some browsers.
+  }
+
+  updateAuthUI();
+}
+
+function resetAuthModal() {
+  loginForm.reset();
+  signupForm.reset();
+
+  authFields.forEach(function (field) {
+    setFieldError(field.input, field.error, "");
+  });
+}
+
+function showAuthPanel(mode) {
+  loginPanel.hidden = mode !== "login";
+  signupPanel.hidden = mode !== "signup";
+  authSuccess.hidden = true;
+  authModal.setAttribute("aria-labelledby", mode === "login" ? "authTitle" : "signupTitle");
+
+  authFields.forEach(function (field) {
+    setFieldError(field.input, field.error, "");
+  });
+
+  if (mode === "login") {
+    loginEmail.focus();
+  } else {
+    signupName.focus();
+  }
+}
+
+function openAuthModal(mode) {
+  resetAuthModal();
+  authModal.classList.add("open");
+  document.body.style.overflow = "hidden";
+  navMenu.classList.remove("open");
+  menuBtn.textContent = "☰";
+  menuBtn.setAttribute("aria-expanded", "false");
+  showAuthPanel(mode);
+}
+
+function closeAuthModal() {
+  authModal.classList.remove("open");
+  document.body.style.overflow = modal.classList.contains("open") ? "hidden" : "";
+  resetAuthModal();
+}
+
+function showAuthSuccess(message) {
+  loginPanel.hidden = true;
+  signupPanel.hidden = true;
+  authSuccessText.textContent = message;
+  authSuccess.hidden = false;
+  authDone.focus();
+}
+
 // ---------- Event listeners ----------
 searchForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -529,8 +682,16 @@ modal.addEventListener("click", function (event) {
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "Escape" && modal.classList.contains("open")) {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  if (modal.classList.contains("open")) {
     closeModal();
+  }
+
+  if (authModal.classList.contains("open")) {
+    closeAuthModal();
   }
 });
 
@@ -630,11 +791,110 @@ navMenu.querySelectorAll("a").forEach(function (link) {
   });
 });
 
-// ---------- Login button ----------
-document.getElementById("loginBtn").addEventListener("click", function () {
-  alert("Login is not available in this demo. Subscribe below for event updates!");
+// ---------- Login / Signup ----------
+loginBtn.addEventListener("click", function () {
+  if (currentUser) {
+    clearUser();
+    return;
+  }
+
+  openAuthModal("login");
+});
+
+signupBtn.addEventListener("click", function () {
+  openAuthModal("signup");
+});
+
+authClose.addEventListener("click", closeAuthModal);
+authDone.addEventListener("click", closeAuthModal);
+
+authModal.addEventListener("click", function (event) {
+  if (event.target === authModal) {
+    closeAuthModal();
+  }
+});
+
+showSignup.addEventListener("click", function () {
+  showAuthPanel("signup");
+});
+
+showLogin.addEventListener("click", function () {
+  showAuthPanel("login");
+});
+
+authFields.forEach(function (field) {
+  field.input.addEventListener("input", function () {
+    setFieldError(field.input, field.error, "");
+  });
+});
+
+loginForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const emailError = validateEmail(loginEmail.value);
+  const passwordError = validatePassword(loginPassword.value);
+
+  setFieldError(loginEmail, loginEmailError, emailError);
+  setFieldError(loginPassword, loginPasswordError, passwordError);
+
+  if (emailError) {
+    loginEmail.focus();
+    return;
+  }
+
+  if (passwordError) {
+    loginPassword.focus();
+    return;
+  }
+
+  const email = loginEmail.value.trim().toLowerCase();
+  const name = currentUser && currentUser.email === email ? currentUser.name : email.split("@")[0];
+
+  saveUser({ name: name, email: email });
+  showAuthSuccess("Logged in successfully. Welcome back, " + name + "!");
+});
+
+signupForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const nameError = validateName(signupName.value);
+  const emailError = validateEmail(signupEmail.value);
+  const passwordError = validatePassword(signupPassword.value);
+  const confirmError = validateConfirmPassword(signupConfirm.value);
+
+  setFieldError(signupName, signupNameError, nameError);
+  setFieldError(signupEmail, signupEmailError, emailError);
+  setFieldError(signupPassword, signupPasswordError, passwordError);
+  setFieldError(signupConfirm, signupConfirmError, confirmError);
+
+  if (nameError) {
+    signupName.focus();
+    return;
+  }
+
+  if (emailError) {
+    signupEmail.focus();
+    return;
+  }
+
+  if (passwordError) {
+    signupPassword.focus();
+    return;
+  }
+
+  if (confirmError) {
+    signupConfirm.focus();
+    return;
+  }
+
+  const name = signupName.value.trim();
+  const email = signupEmail.value.trim().toLowerCase();
+
+  saveUser({ name: name, email: email });
+  showAuthSuccess("Account created. Welcome to AK, " + name + "!");
 });
 
 // ---------- Start ----------
+updateAuthUI();
 renderEvents();
 renderTrending();

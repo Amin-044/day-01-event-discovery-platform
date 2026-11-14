@@ -937,6 +937,45 @@ button {
   margin-top: 8px;
 }
 
+/* ================= LOGIN / SIGNUP ================= */
+.auth-box {
+  max-width: 440px;
+  margin-top: 60px;
+}
+
+.modal-box .auth-logo {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  object-fit: contain;
+}
+
+#loginPanel h2,
+#signupPanel h2 {
+  text-align: center;
+}
+
+.auth-subtitle {
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-switch {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.link-btn {
+  color: var(--primary);
+  font-size: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
 @keyframes pop {
   from {
     opacity: 0;

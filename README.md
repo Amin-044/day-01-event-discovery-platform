@@ -14,7 +14,7 @@ The website is built with only **HTML, CSS and JavaScript**. It does not need a 
 
 ## What the Website Includes
 
-- **Navigation bar** — Home, Events, Categories, About, Login and Get Started. The links scroll to their sections.
+- **Navigation bar** — Home, Events, Categories and About scroll to their sections. Login opens a login form and Get Started opens a signup form.
 - **Hero section** — a short introduction, event-name search, location search and a search button.
 - **Featured Events** — 6 event cards with image, name, date, time, venue, city, category and a **View Details** button.
 - **Categories** — Technology, Music, Business, Sports, Workshops and Education. Clicking a category filters the events.
@@ -31,6 +31,7 @@ The website is built with only **HTML, CSS and JavaScript**. It does not need a 
 - A **Saved** filter to show only favourited events.
 - Event details popup with description, date, location and price.
 - Registration form with validation for name, email, mobile number and number of tickets.
+- Login form and Signup form with email, password and name validation.
 - A "No events found" message with a **Clear Filters** button.
 - Responsive layout for desktop, tablet and mobile.
 - Mobile hamburger menu on small screens.
@@ -69,6 +70,8 @@ All event information is stored in two arrays inside `js/app.js`: `events` (6 fe
 The favourite buttons save event ids in `localStorage` under the key `akFavorites`. The details popup is a simple hidden `<div>` that is filled with the selected event's data and shown with an `open` class.
 
 Clicking **Register Now** opens a registration form inside the same popup. It checks the full name, email, 10-digit Indian mobile number and ticket count, shows an error under each invalid field, and displays a confirmation message when everything is valid.
+
+The **Login** button opens a login form, and **Get Started** opens a signup form in a shared popup. Both check the email and password; signup also checks the name and that the two passwords match. The logged-in user is stored in `localStorage` under `akUser`, and the Login button changes to Logout until the user logs out.
 
 ## Note
 
