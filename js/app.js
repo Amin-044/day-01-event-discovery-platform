@@ -157,6 +157,7 @@ try {
 const eventGrid = document.getElementById("eventGrid");
 const trendingGrid = document.getElementById("trendingGrid");
 const noResults = document.getElementById("noResults");
+const noResultsText = document.getElementById("noResultsText");
 const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const locationInput = document.getElementById("locationInput");
@@ -273,16 +274,19 @@ function toggleFavorite(id) {
 // ---------- Filtering ----------
 function getFilteredEvents() {
   return events.filter(function (event) {
+    // Category filter
     if (currentCategory !== "all" && event.category !== currentCategory) {
       return false;
     }
 
+    // Saved filter
     if (showSaved && !favorites.includes(event.id)) {
       return false;
     }
 
+    // Search by event name / title (Task 2: search by name)
     if (searchTerm) {
-      const text = (
+      var text = (
         event.title + " " + event.category + " " + event.venue + " " + event.location
       ).toLowerCase();
 
@@ -291,8 +295,9 @@ function getFilteredEvents() {
       }
     }
 
+    // Location filter
     if (locationTerm) {
-      const place = (event.location + " " + event.venue).toLowerCase();
+      var place = (event.location + " " + event.venue).toLowerCase();
 
       if (!place.includes(locationTerm)) {
         return false;
@@ -304,7 +309,7 @@ function getFilteredEvents() {
 }
 
 function updateFilterButtons() {
-  const categoryButtons = document.querySelectorAll(".filter-btn[data-category]");
+  var categoryButtons = document.querySelectorAll(".filter-btn[data-category]");
 
   categoryButtons.forEach(function (button) {
     button.classList.toggle("active", button.dataset.category === currentCategory);
@@ -315,36 +320,70 @@ function updateFilterButtons() {
   savedBtn.textContent = "♥ Saved (" + favorites.length + ")";
 }
 
+// ---------- No results message ----------
+function updateNoResultsMessage() {
+  var messages = [];
+
+  if (searchTerm) {
+    messages.push('"' + searchInput.value.trim() + '"');
+  }
+
+  if (locationTerm) {
+    messages.push('in "' + locationInput.value.trim() + '"');
+  }
+
+  if (currentCategory !== "all") {
+    messages.push("in " + currentCategory);
+  }
+
+  if (showSaved) {
+    messages.push("in your saved events");
+  }
+
+  if (messages.length > 0) {
+    noResultsText.textContent = "No events found for " + messages.join(" ") + ". Try a different search or category.";
+  } else {
+    noResultsText.textContent = "No events found. Try a different search or category.";
+  }
+}
+
 // ---------- Rendering ----------
 function createEventCard(event) {
-  const isSaved = favorites.includes(event.id);
+  var isSaved = favorites.includes(event.id);
 
-  return `
-    <article class="event-card">
-      <div class="card-image">
-        <img src="${event.image}" alt="${event.title}" loading="lazy">
-        <span class="category-badge">${event.category}</span>
-        <button class="fav-btn ${isSaved ? "active" : ""}" type="button"
-          data-fav="${event.id}" aria-label="Save ${event.title}" aria-pressed="${isSaved}">♥</button>
-      </div>
-      <div class="card-body">
-        <h3>${event.title}</h3>
-        <p class="meta">📅 ${event.date} · ${event.time}</p>
-        <p class="meta">📍 ${event.venue}, ${event.location}</p>
-        <div class="card-footer">
-          <span class="price">${event.price}</span>
-          <button class="btn btn-small" type="button" data-details="${event.id}">View Details</button>
-        </div>
-      </div>
-    </article>
-  `;
+  return (
+    '<article class="event-card">' +
+      '<div class="card-image">' +
+        '<img src="' + event.image + '" alt="' + event.title + '" loading="lazy">' +
+        '<span class="category-badge">' + event.category + '</span>' +
+        '<button class="fav-btn ' + (isSaved ? "active" : "") + '" type="button" ' +
+          'data-fav="' + event.id + '" aria-label="Save ' + event.title + '" aria-pressed="' + isSaved + '">♥</button>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<h3>' + event.title + '</h3>' +
+        '<p class="meta">📅 ' + event.date + ' · ' + event.time + '</p>' +
+        '<p class="meta">📍 ' + event.venue + ', ' + event.location + '</p>' +
+        '<div class="card-footer">' +
+          '<span class="price">' + event.price + '</span>' +
+          '<button class="btn btn-small" type="button" data-details="' + event.id + '">View Details</button>' +
+        '</div>' +
+      '</div>' +
+    '</article>'
+  );
 }
 
 function renderEvents() {
-  const filteredEvents = getFilteredEvents();
+  var filteredEvents = getFilteredEvents();
 
   eventGrid.innerHTML = filteredEvents.map(createEventCard).join("");
-  noResults.hidden = filteredEvents.length > 0;
+
+  // Task 2: display a message when no events are found
+  var hasResults = filteredEvents.length > 0;
+  noResults.hidden = hasResults;
+
+  if (!hasResults) {
+    updateNoResultsMessage();
+  }
 
   updateFilterButtons();
 }
@@ -352,24 +391,24 @@ function renderEvents() {
 function renderTrending() {
   trendingGrid.innerHTML = trending
     .map(function (event, index) {
-      return `
-        <article class="trend-card">
-          <div class="trend-image">
-            <img src="${event.image}" alt="${event.title}" loading="lazy">
-            <span class="rank-badge">#${index + 1} Trending</span>
-          </div>
-          <div class="trend-body">
-            <span class="trend-category">${event.category} · ${event.attendees}</span>
-            <h3>${event.title}</h3>
-            <p class="meta">📅 ${event.date} · ${event.time}</p>
-            <p class="meta">📍 ${event.venue}, ${event.location}</p>
-            <div class="card-footer">
-              <span class="price">${event.price}</span>
-              <button class="btn btn-small" type="button" data-details="${event.id}">Details</button>
-            </div>
-          </div>
-        </article>
-      `;
+      return (
+        '<article class="trend-card">' +
+          '<div class="trend-image">' +
+            '<img src="' + event.image + '" alt="' + event.title + '" loading="lazy">' +
+            '<span class="rank-badge">#' + (index + 1) + ' Trending</span>' +
+          '</div>' +
+          '<div class="trend-body">' +
+            '<span class="trend-category">' + event.category + ' · ' + event.attendees + '</span>' +
+            '<h3>' + event.title + '</h3>' +
+            '<p class="meta">📅 ' + event.date + ' · ' + event.time + '</p>' +
+            '<p class="meta">📍 ' + event.venue + ', ' + event.location + '</p>' +
+            '<div class="card-footer">' +
+              '<span class="price">' + event.price + '</span>' +
+              '<button class="btn btn-small" type="button" data-details="' + event.id + '">Details</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
     })
     .join("");
 }
@@ -389,7 +428,7 @@ function resetModal() {
 }
 
 function openModal(id) {
-  const event = allEvents.find(function (item) {
+  var event = allEvents.find(function (item) {
     return item.id === id;
   });
 
@@ -422,7 +461,7 @@ function closeModal() {
 }
 
 function openRegisterPanel() {
-  const event = allEvents.find(function (item) {
+  var event = allEvents.find(function (item) {
     return item.id === currentEventId;
   });
 
@@ -452,7 +491,7 @@ function closeRegisterPanel() {
 
 // ---------- Registration validation ----------
 function validateName(value) {
-  const name = value.trim();
+  var name = value.trim();
 
   if (name.length < 3 || !/^[A-Za-z ]+$/.test(name)) {
     return "Enter your full name using letters only.";
@@ -470,7 +509,7 @@ function validateEmail(value) {
 }
 
 function validatePhone(value) {
-  let digits = value.replace(/[\s\-()]/g, "");
+  var digits = value.replace(/[\s\-()]/g, "");
 
   if (digits.indexOf("+91") === 0) {
     digits = digits.slice(3);
@@ -488,7 +527,7 @@ function validatePhone(value) {
 }
 
 function validateTickets(value) {
-  const count = Number(value);
+  var count = Number(value);
 
   if (!Number.isInteger(count) || count < 1 || count > 5) {
     return "Choose between 1 and 5 tickets.";
@@ -600,7 +639,7 @@ function closeAuthModal() {
   resetAuthModal();
 }
 
-function showAuthSuccess(message) {
+function showAuthSuccessMessage(message) {
   loginPanel.hidden = true;
   signupPanel.hidden = true;
   authSuccessText.textContent = message;
@@ -608,7 +647,21 @@ function showAuthSuccess(message) {
   authDone.focus();
 }
 
+// ---------- Debounce for live search ----------
+var searchTimeout = null;
+
+function handleLiveSearch() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(function () {
+    searchTerm = searchInput.value.trim().toLowerCase();
+    locationTerm = locationInput.value.trim().toLowerCase();
+    renderEvents();
+  }, 300);
+}
+
 // ---------- Event listeners ----------
+
+// Task 2 — Search by name: triggers on form submit and live as user types
 searchForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -620,6 +673,11 @@ searchForm.addEventListener("submit", function (event) {
   document.getElementById("events").scrollIntoView({ behavior: "smooth" });
 });
 
+// Live search on typing (debounced)
+searchInput.addEventListener("input", handleLiveSearch);
+locationInput.addEventListener("input", handleLiveSearch);
+
+// Task 2 — Category-based event filtering
 document.querySelectorAll(".filter-btn[data-category]").forEach(function (button) {
   button.addEventListener("click", function () {
     currentCategory = button.dataset.category;
@@ -628,6 +686,7 @@ document.querySelectorAll(".filter-btn[data-category]").forEach(function (button
   });
 });
 
+// Category cards also filter events
 document.querySelectorAll(".category-card").forEach(function (card) {
   card.addEventListener("click", function () {
     currentCategory = card.dataset.category;
@@ -659,14 +718,14 @@ clearFilters.addEventListener("click", function () {
 });
 
 document.addEventListener("click", function (event) {
-  const favButton = event.target.closest("[data-fav]");
+  var favButton = event.target.closest("[data-fav]");
 
   if (favButton) {
     toggleFavorite(favButton.dataset.fav);
     return;
   }
 
-  const detailsButton = event.target.closest("[data-details]");
+  var detailsButton = event.target.closest("[data-details]");
 
   if (detailsButton) {
     openModal(detailsButton.dataset.details);
@@ -708,10 +767,10 @@ registerFields.forEach(function (field) {
 registerForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const nameError = validateName(regName.value);
-  const emailError = validateEmail(regEmail.value);
-  const phoneError = validatePhone(regPhone.value);
-  const ticketsError = validateTickets(regTickets.value);
+  var nameError = validateName(regName.value);
+  var emailError = validateEmail(regEmail.value);
+  var phoneError = validatePhone(regPhone.value);
+  var ticketsError = validateTickets(regTickets.value);
 
   setFieldError(regName, regNameError, nameError);
   setFieldError(regEmail, regEmailError, emailError);
@@ -719,7 +778,7 @@ registerForm.addEventListener("submit", function (event) {
   setFieldError(regTickets, regTicketsError, ticketsError);
 
   if (nameError || emailError || phoneError || ticketsError) {
-    const firstInvalid = nameError
+    var firstInvalid = nameError
       ? regName
       : emailError
       ? regEmail
@@ -731,11 +790,11 @@ registerForm.addEventListener("submit", function (event) {
     return;
   }
 
-  const selectedEvent = allEvents.find(function (item) {
+  var selectedEvent = allEvents.find(function (item) {
     return item.id === currentEventId;
   });
-  const ticketCount = Number(regTickets.value);
-  const ticketText = ticketCount === 1 ? "1 ticket" : ticketCount + " tickets";
+  var ticketCount = Number(regTickets.value);
+  var ticketText = ticketCount === 1 ? "1 ticket" : ticketCount + " tickets";
 
   successEvent.textContent = selectedEvent ? selectedEvent.title : "your event";
   successNote.textContent = ticketText + " · Confirmation sent to " + regEmail.value.trim();
@@ -749,8 +808,8 @@ registerForm.addEventListener("submit", function (event) {
 newsletterForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const email = emailInput.value.trim();
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var email = emailInput.value.trim();
+  var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (email === "") {
     newsletterMsg.textContent = "Please enter your email address.";
@@ -776,7 +835,7 @@ emailInput.addEventListener("input", function () {
 
 // ---------- Mobile menu ----------
 menuBtn.addEventListener("click", function () {
-  const isOpen = navMenu.classList.toggle("open");
+  var isOpen = navMenu.classList.toggle("open");
 
   menuBtn.textContent = isOpen ? "✕" : "☰";
   menuBtn.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
@@ -789,6 +848,17 @@ navMenu.querySelectorAll("a").forEach(function (link) {
     menuBtn.textContent = "☰";
     menuBtn.setAttribute("aria-expanded", "false");
   });
+});
+
+// ---------- Header scroll effect ----------
+window.addEventListener("scroll", function () {
+  var header = document.querySelector(".header");
+
+  if (window.scrollY > 10) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
 });
 
 // ---------- Login / Signup ----------
@@ -831,8 +901,8 @@ authFields.forEach(function (field) {
 loginForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const emailError = validateEmail(loginEmail.value);
-  const passwordError = validatePassword(loginPassword.value);
+  var emailError = validateEmail(loginEmail.value);
+  var passwordError = validatePassword(loginPassword.value);
 
   setFieldError(loginEmail, loginEmailError, emailError);
   setFieldError(loginPassword, loginPasswordError, passwordError);
@@ -847,20 +917,20 @@ loginForm.addEventListener("submit", function (event) {
     return;
   }
 
-  const email = loginEmail.value.trim().toLowerCase();
-  const name = currentUser && currentUser.email === email ? currentUser.name : email.split("@")[0];
+  var email = loginEmail.value.trim().toLowerCase();
+  var name = currentUser && currentUser.email === email ? currentUser.name : email.split("@")[0];
 
   saveUser({ name: name, email: email });
-  showAuthSuccess("Logged in successfully. Welcome back, " + name + "!");
+  showAuthSuccessMessage("Logged in successfully. Welcome back, " + name + "!");
 });
 
 signupForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const nameError = validateName(signupName.value);
-  const emailError = validateEmail(signupEmail.value);
-  const passwordError = validatePassword(signupPassword.value);
-  const confirmError = validateConfirmPassword(signupConfirm.value);
+  var nameError = validateName(signupName.value);
+  var emailError = validateEmail(signupEmail.value);
+  var passwordError = validatePassword(signupPassword.value);
+  var confirmError = validateConfirmPassword(signupConfirm.value);
 
   setFieldError(signupName, signupNameError, nameError);
   setFieldError(signupEmail, signupEmailError, emailError);
@@ -887,11 +957,11 @@ signupForm.addEventListener("submit", function (event) {
     return;
   }
 
-  const name = signupName.value.trim();
-  const email = signupEmail.value.trim().toLowerCase();
+  var name = signupName.value.trim();
+  var email = signupEmail.value.trim().toLowerCase();
 
   saveUser({ name: name, email: email });
-  showAuthSuccess("Account created. Welcome to AK, " + name + "!");
+  showAuthSuccessMessage("Account created. Welcome to AK, " + name + "!");
 });
 
 // ---------- Start ----------
