@@ -1,111 +1,90 @@
-# AK — Event Discovery Website
+# AK - Event Discovery Website
 
-AK is a simple event discovery website made for the Day 01 frontend assignment. It helps users find concerts, conferences, workshops, sports events and more in one place.
+Hey! This is **AK**, a small event discovery website I made for my frontend assignment. The idea is simple — instead of searching on ten different sites, you can find concerts, conferences, workshops, sports events and all that in one place.
 
-The website is built with only **HTML, CSS and JavaScript**. It does not need a server, database or any framework — you can open `index.html` directly in a browser.
+I built it using only **HTML, CSS and JavaScript**. No framework, no server, no database. Just open `index.html` in a browser and it works.
 
-![AK desktop preview](screenshots/preview-desktop.jpg)
+## Screenshots
 
-<p align="center">
-  <img src="screenshots/preview-mobile.jpg" alt="AK on mobile" width="240">
-</p>
+![AK on desktop](screenshots/Desktop%20preview.jpg)
+
+Want to see the whole page? [Here is the full desktop screenshot](screenshots/newdesktop.jpg).
 
 ---
 
-## What the Website Includes
+## What you can do on this site
 
-- **Navigation bar** — Home, Events, Categories and About scroll to their sections. Login opens a login form and Get Started opens a signup form. Glassmorphism effect and scroll shadow.
-- **Hero section** — a short introduction with gradient background, live event-name search, location search and a search button.
-- **Featured Events** — 6 event cards with CSS Grid layout, image hover zoom, category badge, favourite button, event details and responsive card design.
-- **Categories** — Technology, Music, Business, Sports, Workshops and Education. Clicking a category filters the events with smooth hover effects.
-- **Trending Now** — 3 popular events shown with rank badges and trending indicators.
-- **About section** — a short explanation of what AK offers with improved typography and spacing.
-- **Newsletter** — an email form that checks for empty or invalid emails before showing a success message.
-- **Footer** — social links, quick links and contact details.
+- Search events by name — results change while you type
+- Search by **city or venue**
+- Filter events by category: Technology, Music, Business, Sports, Workshops and Education
+- Sort events by price (low to high or high to low)
+- See the number of events left after filtering
+- Click the heart button to save an event, and use the **Saved** button to see them
+- Click **View Details** to open an event — the last 3 events you open show up in a **Recently Viewed** section
+- **Log in first, then register** for an event — the form fills your name and email automatically
+- See a **booking summary** with ticket price, quantity and total amount before you confirm
+- Check all your confirmed tickets in the **My Bookings** section, or cancel one if you change your mind
+- Login / Signup forms for practice
+- Subscribe with the newsletter form (it checks the email first)
+- Hamburger menu on mobile, everything is responsive
 
-## Main Features
+## How to run it
 
-- **Live search by event name** — results update as you type (300ms debounce).
-- **Category-based filtering** — filter events by Technology, Music, Business, Sports, Workshops or Education.
-- **City/venue search** — works together with category and name filters.
-- **Dynamic "no events found" message** — shows which filters are active when no results match.
-- Favourite (heart) button that saves events in `localStorage`.
-- A **Saved** filter to show only favourited events.
-- Event details popup with description, date, location and price.
-- Registration form with validation for name, email, mobile number and number of tickets.
-- Login form and Signup form with email, password and name validation.
-- **Clear Filters** button to reset all active filters.
-- **Fully responsive layout** — optimized for desktop, tablet and mobile with proper breakpoints.
-- Mobile hamburger menu with smooth transitions.
-- **Modern UI/UX** — CSS Grid cards, smooth hover effects, shadows, glassmorphism, and polished transitions.
+1. Download or copy this folder.
+2. Open `index.html` in Chrome (or any browser).
 
-## Technologies Used
+That's it, nothing to install. If you are using VS Code, you can also use the **Live Server** extension.
 
-- **HTML5** — semantic page structure with accessibility attributes.
-- **CSS3** — CSS Grid for card layouts, Flexbox, custom properties (CSS variables), gradients, backdrop-filter, transitions, and responsive media queries.
-- **JavaScript (ES5)** — event data, DOM rendering, live search with debouncing, category filtering, favourites management, popup modals and form validation.
-
-## Folder Structure
+## Files in this folder
 
 ```text
 Event Dictionery/
-├── index.html
+├── index.html          all the sections of the page
 ├── css/
-│   └── style.css
+│   └── style.css       styling and media queries
 ├── js/
-│   └── app.js
-├── images/                 # Event photos and the AK logo icon
-├── screenshots/
-└── README.md
+│   └── app.js          event data + all the JavaScript
+├── images/             event photos, hero images and the logo
+├── screenshots/        screenshots of the website
+└── README.md           this file
 ```
 
-## How to Run
+## How I made it (brief explanation)
 
-1. Download or copy the project folder.
-2. Open `index.html` in any browser.
+All the events are stored as objects in an array inside `app.js`. JavaScript takes that array and creates the event cards, so I didn't have to write them by hand. When you type in the search box or click a category, I filter the array and render the cards again.
 
-That's it — no installation or server is required. If you use VS Code, you can also open it with the **Live Server** extension.
+For the search I used a small delay (300ms debounce) so the filtering doesn't run on every single keystroke. Favourites, recently viewed events, the logged-in user and bookings are all saved in `localStorage`, so they are still there after you close the browser. I wrapped those calls in `try...catch` so the page doesn't break if a browser blocks storage. The popups are just hidden `div`s that get an `open` class when you click a button.
 
-## How It Works
+For the design I used CSS Grid for the cards, Flexbox for alignment, CSS variables for colours and media queries for tablet and mobile sizes. The navbar has a glass kind of effect using `backdrop-filter`, and it gets a shadow when you scroll.
 
-All event information is stored in two arrays inside `js/app.js`: `events` (6 featured events) and `trending` (3 events). JavaScript builds the cards from this data using CSS Grid, applies the active category and search terms, and re-renders the grid dynamically.
+### About the booking part
 
-### Live Search
-Search inputs have debounced event listeners (300ms delay) that filter events as you type. The search looks through event title, category, venue and location fields. You can also submit the search form explicitly to jump to the events section.
+When you click **Register Now** without logging in, the event popup closes and the login popup opens with a small note telling you to log in first. After logging in, the registration form is filled with your name and email. Changing the number of tickets updates the total amount instantly (₹ price × tickets, or "Free" for free events).
 
-### CSS Grid Layout
-Event cards use `display: grid` with `grid-template-rows: auto 1fr` to ensure the card footer always stays at the bottom regardless of content length. The cards have hover effects including translateY, box-shadow transitions, and image zoom.
+When the form is valid, I create a booking object with a booking ID (`BK` + timestamp), event details, tickets, total amount and the booking date, then save it in `localStorage`. The **My Bookings** section reads that list and shows one card per booking. The cancel button asks for confirmation first, then removes that booking from the list and saves it again. The category card counts are also calculated from the event array instead of being typed in HTML, so they never go out of sync.
 
-### Filtering
-The category filter buttons and saved events button work together with search. When multiple filters are active, events must match all criteria. The "no events found" message dynamically lists which filters are active.
+## What I added in this update
 
-### Favourites
-The favourite buttons save event ids in `localStorage` under the key `akFavorites`. The heart icon fills with color when active, and the saved count updates in real-time.
+- A **My Bookings** section with booking cards and a cancel button
+- A booking summary that calculates the total when you change the number of tickets
+- Registration now needs login first, and the form is pre-filled with your details
+- Bookings are saved in `localStorage` under `akBookings`
+- Category event counts are now calculated automatically with JavaScript
+- Moved the Trending section higher up on the page
 
-### Modals
-The details popup is a hidden `<div>` that is filled with the selected event's data and shown with an `open` class. Clicking **Register Now** opens a registration form inside the same popup. It validates the full name, email, 10-digit Indian mobile number and ticket count, shows field-specific errors, and displays a confirmation message when valid.
+## Stuff I learned from this project
 
-### Authentication
-The **Login** button opens a login form, and **Get Started** opens a signup form in a shared popup. Both validate email and password; signup also checks the name and that passwords match. The logged-in user is stored in `localStorage` under `akUser`, and the Login button changes to Logout.
+- Rendering cards with JavaScript instead of writing them in HTML
+- Using `localStorage` to save things in the browser
+- CSS Grid (and how it is different from Flexbox)
+- Making a page actually work on mobile with media queries
+- Basic form validation in JavaScript
+- How filter and sort can work together without breaking each other
+- Calculating a total from form values and updating it live
+- Using `confirm()` before deleting something
 
-### Responsive Design
-The layout uses CSS Grid with responsive breakpoints at 992px, 900px, 768px, 576px and 400px. The grid adjusts from 3 columns on desktop to 2 on tablet and 1 on mobile. The navigation collapses into a hamburger menu on mobile devices.
+## Small note
 
-## Recent Updates (November 2026)
+The Poppins font is loaded from Google Fonts. If there is no internet, it falls back to Arial and the rest of the site still works fine.
 
-### Task 1: Layout Improvements
-- Redesigned event cards using CSS Grid with proper structure and hover effects
-- Enhanced navbar with glassmorphism backdrop-filter and scroll shadow effect
-- Improved hero section with gradient background and decorative radial accent
-- Polished all cards (event, trending, category) with consistent shadows and transitions
-- Refined responsive breakpoints for better mobile and desktop experience
-
-### Task 2: JavaScript Enhancements
-- Added live search functionality that updates results as you type (debounced)
-- Enhanced category-based filtering with better visual feedback
-- Dynamic "no events found" messages showing active filters
-- Added header scroll effect that applies shadow when scrolling
-
-## Note
-
-The Poppins font is loaded from Google Fonts. If there is no internet connection, the website automatically falls back to Arial and everything else still works.
+Made by Amin-044 for the frontend assignment 🎉

@@ -13,7 +13,7 @@ const events = [
     time: "10:00 AM",
     venue: "Bengaluru International Exhibition Centre",
     location: "Bengaluru, Karnataka",
-    price: "₹2,499",
+    price: 2499,
     image: "images/event-tech.jpg",
     description:
       "A full-day summit with talks on artificial intelligence, web development and the future of technology. Meet founders, developers and students from across the country."
@@ -26,7 +26,7 @@ const events = [
     time: "7:00 PM",
     venue: "MMRDA Grounds",
     location: "Mumbai, Maharashtra",
-    price: "₹1,499",
+    price: 1499,
     image: "images/event-music.jpg",
     description:
       "An open-air night of live music, lights and food trucks. Featuring local bands, DJs and a headline performance to close the evening."
@@ -39,7 +39,7 @@ const events = [
     time: "6:30 PM",
     venue: "T-Hub Auditorium",
     location: "Hyderabad, Telangana",
-    price: "₹999",
+    price: 999,
     image: "images/event-startup.jpg",
     description:
       "A networking evening for founders, investors and students interested in startups. Short talks followed by open networking and refreshments."
@@ -52,7 +52,7 @@ const events = [
     time: "6:00 AM",
     venue: "Marine Drive",
     location: "Mumbai, Maharashtra",
-    price: "₹499",
+    price: 499,
     image: "images/event-sports.jpg",
     description:
       "Run 21 kilometres through the city with water stations and cheering points along the route. Finishers receive a medal and a free breakfast."
@@ -65,7 +65,7 @@ const events = [
     time: "11:00 AM",
     venue: "91springboard",
     location: "Pune, Maharashtra",
-    price: "Free",
+    price: 0,
     image: "images/event-workshop.jpg",
     description:
       "A hands-on workshop covering wireframes, colour and usability basics. Bring a laptop and leave with a small design project for your portfolio."
@@ -78,10 +78,114 @@ const events = [
     time: "9:00 AM",
     venue: "India Habitat Centre",
     location: "New Delhi, Delhi",
-    price: "₹799",
+    price: 799,
     image: "images/event-education.jpg",
     description:
       "Teachers, students and researchers discuss new ways of learning, online education and the role of technology in the classroom."
+  },
+  {
+    id: "e7",
+    title: "Digital Marketing Bootcamp",
+    category: "Business",
+    date: "2 Feb 2027",
+    time: "10:00 AM",
+    venue: "WeWork Galaxy",
+    location: "Bengaluru, Karnataka",
+    price: 1999,
+    image: "images/event-startup.jpg",
+    description:
+      "Learn SEO, social media marketing, content strategy and analytics in this intensive two-day bootcamp led by industry experts."
+  },
+  {
+    id: "e8",
+    title: "Jazz Under the Stars",
+    category: "Music",
+    date: "14 Feb 2027",
+    time: "7:30 PM",
+    venue: "Nehru Park",
+    location: "New Delhi, Delhi",
+    price: 899,
+    image: "images/UTS.jpg",
+    description:
+      "An evening of smooth jazz performed by renowned artists in an open-air setting. Bring your loved ones for a romantic musical experience."
+  },
+  {
+    id:"e9",
+    title: "Photography Masterclass",
+    category: "Workshops",
+    date: "8 Feb 2027",
+    time: "2:00 PM",
+    venue: "Creative arts studio",
+    location: "Jaipur, Rajasthan",
+    price: 1299,
+    image: "images/photographer.jpg",
+    description:
+      "Learn professional photography techniques including lighting, composition, and post-processing. Bring your camera and capture stunning images."
+  },
+  {
+    id: "e10",
+    title: "AI & Machine Learning Expo",
+    category: "Technology",
+    date: "22 Feb 2027",
+    time: "9:00 AM",
+    venue: "Pragati Maidan Convention Centre",
+    location: "New Delhi, Delhi",
+    price: 3499,
+    image: "images/event-tech.jpg",
+    description:
+      "Explore the latest in AI and machine learning with live demos, expert panels, and networking opportunities. Connect with industry leaders and innovators."
+  },
+  {
+    id: "e11",
+    title: "Indie Music Night",
+    category: "Music",
+    date: "28 Feb 2027",
+    time: "8:00 PM",
+    venue: "Blue Frog",
+    location: "Mumbai, Maharashtra",
+    price: 699,
+    image: "images/event-music.jpg",
+    description:
+      "Experience the best of independent music with performances from emerging artists. A night of acoustic sets, storytelling, and great vibes."
+  },
+  {
+    id: "e12",
+    title: "Youth Leadership Summit",
+    category: "Education",
+    date: "10 Mar 2027",
+    time: "10:00 AM",
+    venue: "Christ University",
+    location: "Bengaluru, Karnataka",
+    price: 0,
+    image: "images/event-education.jpg",
+    description:
+      "Free summit for students and young professionals focused on leadership skills, career planning, and personal development. Featuring inspiring speakers and workshops."
+  },
+  {
+    id: "e13",
+    title: "Cricket Premier League Match",
+    category: "Sports",
+    date: "15 Mar 2027",
+    time: "3:00 PM",
+    venue: "Wankhede Stadium",
+    location: "Mumbai, Maharashtra",
+    price: 1299,
+    image: "images/event-sports.jpg",
+    description:
+      "Watch an exciting T20 cricket match live at the iconic Wankhede Stadium. Premium seating with great views and stadium atmosphere."
+  },
+  {
+    id: "e14",
+    title: "Public Speaking Bootcamp",
+    category: "Workshops",
+    date: "20 Mar 2027",
+    time: "10:00 AM",
+    venue: "Skillbox Training Centre",
+    location: "Pune, Maharashtra",
+    price: 1599,
+    image: "images/event-workshop.jpg",
+    description:
+      "Overcome stage fright and master the art of public speaking. Two-day intensive bootcamp with practical exercises, video feedback, and expert coaching."
   }
 ];
 
@@ -94,7 +198,7 @@ const trending = [
     time: "4:00 PM",
     venue: "Mahalaxmi Racecourse",
     location: "Mumbai, Maharashtra",
-    price: "₹2,499",
+    price: 2499,
     attendees: "8.6k going",
     image: "images/event-festival.jpg",
     description:
@@ -108,7 +212,7 @@ const trending = [
     time: "10:00 AM",
     venue: "Hyderabad International Convention Centre",
     location: "Hyderabad, Telangana",
-    price: "₹3,999",
+    price: 3999,
     attendees: "5.1k going",
     image: "images/event-summit.jpg",
     description:
@@ -122,7 +226,7 @@ const trending = [
     time: "11:00 AM",
     venue: "The Leela Palace",
     location: "Bengaluru, Karnataka",
-    price: "₹1,499",
+    price: 1499,
     attendees: "4.3k going",
     image: "images/event-creator.jpg",
     description:
@@ -140,6 +244,9 @@ let showSaved = false;
 let favorites = [];
 let currentEventId = null;
 let currentUser = null;
+let sortOrder = "none"; // "none", "low-to-high", "high-to-low"
+let recentlyViewed = [];
+let bookings = [];
 
 try {
   favorites = JSON.parse(localStorage.getItem("akFavorites")) || [];
@@ -153,9 +260,23 @@ try {
   currentUser = null;
 }
 
+try {
+  recentlyViewed = JSON.parse(localStorage.getItem("akRecentlyViewed")) || [];
+} catch (error) {
+  recentlyViewed = [];
+}
+
+try {
+  bookings = JSON.parse(localStorage.getItem("akBookings")) || [];
+} catch (error) {
+  bookings = [];
+}
+
 // ---------- Elements ----------
 const eventGrid = document.getElementById("eventGrid");
 const trendingGrid = document.getElementById("trendingGrid");
+const recentlyViewedGrid = document.getElementById("recentlyViewedGrid");
+const recentlyViewedSection = document.getElementById("recentlyViewed");
 const noResults = document.getElementById("noResults");
 const noResultsText = document.getElementById("noResultsText");
 const searchForm = document.getElementById("searchForm");
@@ -193,6 +314,14 @@ const regNameError = document.getElementById("regNameError");
 const regEmailError = document.getElementById("regEmailError");
 const regPhoneError = document.getElementById("regPhoneError");
 const regTicketsError = document.getElementById("regTicketsError");
+
+const summaryEventName = document.getElementById("summaryEventName");
+const summaryTicketPrice = document.getElementById("summaryTicketPrice");
+const summaryQuantity = document.getElementById("summaryQuantity");
+const summaryTotal = document.getElementById("summaryTotal");
+
+const bookingsGrid = document.getElementById("bookingsGrid");
+const noBookings = document.getElementById("noBookings");
 
 const registerFields = [
   { input: regName, error: regNameError },
@@ -258,6 +387,33 @@ function saveFavorites() {
   }
 }
 
+// ---------- Recently Viewed ----------
+function saveRecentlyViewed() {
+  try {
+    localStorage.setItem("akRecentlyViewed", JSON.stringify(recentlyViewed));
+  } catch (error) {
+    // localStorage may be blocked in some browsers.
+  }
+}
+
+function addToRecentlyViewed(id) {
+  // Remove if already exists
+  recentlyViewed = recentlyViewed.filter(function (item) {
+    return item !== id;
+  });
+
+  // Add to the beginning
+  recentlyViewed.unshift(id);
+
+  // Keep only the last 3 viewed events
+  if (recentlyViewed.length > 3) {
+    recentlyViewed = recentlyViewed.slice(0, 3);
+  }
+
+  saveRecentlyViewed();
+  renderRecentlyViewed();
+}
+
 function toggleFavorite(id) {
   if (favorites.includes(id)) {
     favorites = favorites.filter(function (item) {
@@ -269,11 +425,12 @@ function toggleFavorite(id) {
 
   saveFavorites();
   renderEvents();
+  renderRecentlyViewed(); // Update recently viewed if favorites changed
 }
 
-// ---------- Filtering ----------
+// ---------- Filtering & Sorting ----------
 function getFilteredEvents() {
-  return events.filter(function (event) {
+  var filtered = events.filter(function (event) {
     // Category filter
     if (currentCategory !== "all" && event.category !== currentCategory) {
       return false;
@@ -284,7 +441,7 @@ function getFilteredEvents() {
       return false;
     }
 
-    // Search by event name / title (Task 2: search by name)
+    // Search by event name 
     if (searchTerm) {
       var text = (
         event.title + " " + event.category + " " + event.venue + " " + event.location
@@ -306,6 +463,161 @@ function getFilteredEvents() {
 
     return true;
   });
+
+  // Task 3: Sorting by price
+  if (sortOrder === "low-to-high") {
+    filtered.sort(function (a, b) {
+      return a.price - b.price;
+    });
+  } else if (sortOrder === "high-to-low") {
+    filtered.sort(function (a, b) {
+      return b.price - a.price;
+    });
+  }
+
+  return filtered;
+}
+
+// Helper function to format price for display
+function formatPrice(price) {
+  if (price === 0) {
+    return "Free";
+  }
+  return "₹" + price.toLocaleString("en-IN");
+}
+
+// ---------- Booking Summary ----------
+function updateBookingSummary() {
+  var event = allEvents.find(function (item) {
+    return item.id === currentEventId;
+  });
+
+  if (!event) {
+    return;
+  }
+
+  var ticketCount = Number(regTickets.value);
+
+  summaryEventName.textContent = event.title;
+  summaryTicketPrice.textContent = formatPrice(event.price);
+  summaryQuantity.textContent = ticketCount;
+
+  if (event.price === 0) {
+    summaryTotal.textContent = "Free";
+  } else {
+    var total = event.price * ticketCount;
+    summaryTotal.textContent = "₹" + total.toLocaleString("en-IN");
+  }
+}
+
+// ---------- Bookings ----------
+function saveBookings() {
+  try {
+    localStorage.setItem("akBookings", JSON.stringify(bookings));
+  } catch (error) {
+    // localStorage may be blocked in some browsers.
+  }
+}
+
+function createBooking(eventId, name, email, phone, ticketCount) {
+  var event = allEvents.find(function (item) {
+    return item.id === eventId;
+  });
+
+  if (!event) {
+    return null;
+  }
+
+  var totalAmount = event.price * ticketCount;
+  var bookingDate = new Date().toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+
+  var booking = {
+    id: "BK" + Date.now(),
+    eventId: event.id,
+    eventTitle: event.title,
+    eventDate: event.date,
+    eventTime: event.time,
+    venue: event.venue,
+    location: event.location,
+    ticketPrice: event.price,
+    ticketCount: ticketCount,
+    totalAmount: totalAmount,
+    bookingDate: bookingDate,
+    customerName: name,
+    customerEmail: email,
+    customerPhone: phone,
+    status: "confirmed"
+  };
+
+  bookings.unshift(booking);
+  saveBookings();
+  return booking;
+}
+
+function cancelBooking(bookingId) {
+  bookings = bookings.filter(function (booking) {
+    return booking.id !== bookingId;
+  });
+
+  saveBookings();
+  renderBookings();
+}
+
+function renderBookings() {
+  if (!bookingsGrid || !noBookings) {
+    return;
+  }
+
+  if (bookings.length === 0) {
+    bookingsGrid.innerHTML = "";
+    noBookings.hidden = false;
+    return;
+  }
+
+  noBookings.hidden = true;
+
+  bookingsGrid.innerHTML = bookings
+    .map(function (booking) {
+      return (
+        '<div class="booking-card">' +
+          '<div class="booking-card-header">' +
+            '<h3>' + booking.eventTitle + '</h3>' +
+            '<span class="booking-status">CONFIRMED</span>' +
+          '</div>' +
+          '<div class="booking-card-body">' +
+            '<div class="booking-detail">' +
+              '<span class="booking-detail-label">Event Date</span>' +
+              '<span class="booking-detail-value">' + booking.eventDate + ' · ' + booking.eventTime + '</span>' +
+            '</div>' +
+            '<div class="booking-detail">' +
+              '<span class="booking-detail-label">Booking Date</span>' +
+              '<span class="booking-detail-value">' + booking.bookingDate + '</span>' +
+            '</div>' +
+            '<div class="booking-detail">' +
+              '<span class="booking-detail-label">Venue</span>' +
+              '<span class="booking-detail-value">' + booking.venue + ', ' + booking.location + '</span>' +
+            '</div>' +
+            '<div class="booking-detail">' +
+              '<span class="booking-detail-label">Tickets</span>' +
+              '<span class="booking-detail-value">' + booking.ticketCount + ' × ' + formatPrice(booking.ticketPrice) + '</span>' +
+            '</div>' +
+            '<div class="booking-detail">' +
+              '<span class="booking-detail-label">Total Amount</span>' +
+              '<span class="booking-detail-value total-amount">' + formatPrice(booking.totalAmount) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="booking-card-footer">' +
+            '<span class="booking-id">Booking ID: ' + booking.id + '</span>' +
+            '<button class="btn-cancel" type="button" data-cancel-booking="' + booking.id + '">Cancel Booking</button>' +
+          '</div>' +
+        '</div>'
+      );
+    })
+    .join("");
 }
 
 function updateFilterButtons() {
@@ -318,6 +630,34 @@ function updateFilterButtons() {
   savedBtn.classList.toggle("active", showSaved);
   savedBtn.setAttribute("aria-pressed", showSaved ? "true" : "false");
   savedBtn.textContent = "♥ Saved (" + favorites.length + ")";
+}
+
+// ---------- Update Category Counts ----------
+function updateCategoryCounts() {
+  var categoryCounts = {};
+
+  // Count events in each category
+  events.forEach(function (event) {
+    if (categoryCounts[event.category]) {
+      categoryCounts[event.category]++;
+    } else {
+      categoryCounts[event.category] = 1;
+    }
+  });
+
+  // Update each category card
+  var categoryCards = document.querySelectorAll(".category-card");
+  categoryCards.forEach(function (card) {
+    var category = card.dataset.category;
+    var countElement = card.querySelector("p");
+
+    if (countElement && categoryCounts[category]) {
+      var count = categoryCounts[category];
+      countElement.textContent = count + (count === 1 ? " Event" : " Events");
+    } else if (countElement) {
+      countElement.textContent = "0 Events";
+    }
+  });
 }
 
 // ---------- No results message ----------
@@ -364,7 +704,7 @@ function createEventCard(event) {
         '<p class="meta">📅 ' + event.date + ' · ' + event.time + '</p>' +
         '<p class="meta">📍 ' + event.venue + ', ' + event.location + '</p>' +
         '<div class="card-footer">' +
-          '<span class="price">' + event.price + '</span>' +
+          '<span class="price">' + formatPrice(event.price) + '</span>' +
           '<button class="btn btn-small" type="button" data-details="' + event.id + '">View Details</button>' +
         '</div>' +
       '</div>' +
@@ -386,6 +726,15 @@ function renderEvents() {
   }
 
   updateFilterButtons();
+  updateEventCount(filteredEvents.length);
+}
+
+// Task 3: Display total number of events currently shown
+function updateEventCount(count) {
+  var eventCountElement = document.getElementById("eventCount");
+  if (eventCountElement) {
+    eventCountElement.textContent = count + " event" + (count !== 1 ? "s" : "") + " found";
+  }
 }
 
 function renderTrending() {
@@ -403,8 +752,58 @@ function renderTrending() {
             '<p class="meta">📅 ' + event.date + ' · ' + event.time + '</p>' +
             '<p class="meta">📍 ' + event.venue + ', ' + event.location + '</p>' +
             '<div class="card-footer">' +
-              '<span class="price">' + event.price + '</span>' +
+              '<span class="price">' + formatPrice(event.price) + '</span>' +
               '<button class="btn btn-small" type="button" data-details="' + event.id + '">Details</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
+    })
+    .join("");
+}
+
+function renderRecentlyViewed() {
+  if (!recentlyViewedGrid || !recentlyViewedSection) {
+    return;
+  }
+
+  // Get the events corresponding to recently viewed IDs
+  var recentEvents = recentlyViewed
+    .map(function (id) {
+      return allEvents.find(function (event) {
+        return event.id === id;
+      });
+    })
+    .filter(function (event) {
+      return event !== undefined;
+    });
+
+  // Show or hide the section based on whether there are recently viewed events
+  if (recentEvents.length === 0) {
+    recentlyViewedSection.hidden = true;
+    return;
+  }
+
+  recentlyViewedSection.hidden = false;
+
+  recentlyViewedGrid.innerHTML = recentEvents
+    .map(function (event) {
+      var isSaved = favorites.includes(event.id);
+      return (
+        '<article class="event-card">' +
+          '<div class="card-image">' +
+            '<img src="' + event.image + '" alt="' + event.title + '" loading="lazy">' +
+            '<span class="category-badge">' + event.category + '</span>' +
+            '<button class="fav-btn ' + (isSaved ? "active" : "") + '" type="button" ' +
+              'data-fav="' + event.id + '" aria-label="Save ' + event.title + '" aria-pressed="' + isSaved + '">♥</button>' +
+          '</div>' +
+          '<div class="card-body">' +
+            '<h3>' + event.title + '</h3>' +
+            '<p class="meta">📅 ' + event.date + ' · ' + event.time + '</p>' +
+            '<p class="meta">📍 ' + event.venue + ', ' + event.location + '</p>' +
+            '<div class="card-footer">' +
+              '<span class="price">' + formatPrice(event.price) + '</span>' +
+              '<button class="btn btn-small" type="button" data-details="' + event.id + '">View Details</button>' +
             '</div>' +
           '</div>' +
         '</article>'
@@ -437,6 +836,10 @@ function openModal(id) {
   }
 
   currentEventId = event.id;
+
+  // Add to recently viewed
+  addToRecentlyViewed(event.id);
+
   resetModal();
 
   modalImg.src = event.image;
@@ -446,7 +849,7 @@ function openModal(id) {
   modalDesc.textContent = event.description;
   modalDate.textContent = event.date + " · " + event.time;
   modalLocation.textContent = event.venue + ", " + event.location;
-  modalPrice.textContent = event.price;
+  modalPrice.textContent = formatPrice(event.price);
 
   modal.classList.add("open");
   document.body.style.overflow = "hidden";
@@ -461,6 +864,30 @@ function closeModal() {
 }
 
 function openRegisterPanel() {
+  // Check if user is logged in
+  if (!currentUser) {
+    closeModal();
+    openAuthModal("login");
+
+    // Show a message to inform user
+    setTimeout(function() {
+      var loginPanel = document.getElementById("loginPanel");
+      if (loginPanel && !loginPanel.hidden) {
+        var messageDiv = document.createElement("div");
+        messageDiv.className = "auth-info-message";
+        messageDiv.textContent = "Please log in to register for events.";
+        messageDiv.style.cssText = "margin-bottom: 16px; padding: 12px; border-radius: 6px; background: #fff3cd; color: #856404; font-size: 14px; text-align: center; border: 1px solid #ffeaa7;";
+
+        var form = document.getElementById("loginForm");
+        if (form && form.parentNode) {
+          form.parentNode.insertBefore(messageDiv, form);
+        }
+      }
+    }, 100);
+
+    return;
+  }
+
   var event = allEvents.find(function (item) {
     return item.id === currentEventId;
   });
@@ -475,12 +902,22 @@ function openRegisterPanel() {
   registerForm.hidden = false;
   registerForm.reset();
 
+  // Pre-fill form with user data
+  if (currentUser.name) {
+    regName.value = currentUser.name;
+  }
+  if (currentUser.email) {
+    regEmail.value = currentUser.email;
+  }
+
   regEventTitle.textContent = event.title;
   regEventInfo.textContent =
-    event.date + " · " + event.venue + ", " + event.location + " · Entry: " + event.price;
+    event.date + " · " + event.venue + ", " + event.location + " · Entry: " + formatPrice(event.price);
+
+  updateBookingSummary();
 
   modal.setAttribute("aria-labelledby", "registerTitle");
-  regName.focus();
+  regPhone.focus();
 }
 
 function closeRegisterPanel() {
@@ -677,7 +1114,7 @@ searchForm.addEventListener("submit", function (event) {
 searchInput.addEventListener("input", handleLiveSearch);
 locationInput.addEventListener("input", handleLiveSearch);
 
-// Task 2 — Category-based event filtering
+// Task 3 — Category-based event filtering
 document.querySelectorAll(".filter-btn[data-category]").forEach(function (button) {
   button.addEventListener("click", function () {
     currentCategory = button.dataset.category;
@@ -685,6 +1122,33 @@ document.querySelectorAll(".filter-btn[data-category]").forEach(function (button
     renderEvents();
   });
 });
+
+// Task 3: Sort events by price
+var sortSelect = document.getElementById("sortSelect");
+if (sortSelect) {
+  sortSelect.addEventListener("change", function () {
+    sortOrder = sortSelect.value;
+    renderEvents();
+  });
+}
+
+// Task 3: Clear all filters button
+var clearAllFiltersBtn = document.getElementById("clearAllFilters");
+if (clearAllFiltersBtn) {
+  clearAllFiltersBtn.addEventListener("click", function () {
+    currentCategory = "all";
+    searchTerm = "";
+    locationTerm = "";
+    showSaved = false;
+    sortOrder = "none";
+    searchInput.value = "";
+    locationInput.value = "";
+    if (sortSelect) {
+      sortSelect.value = "none";
+    }
+    renderEvents();
+  });
+}
 
 // Category cards also filter events
 document.querySelectorAll(".category-card").forEach(function (card) {
@@ -729,6 +1193,18 @@ document.addEventListener("click", function (event) {
 
   if (detailsButton) {
     openModal(detailsButton.dataset.details);
+    return;
+  }
+
+  var cancelButton = event.target.closest("[data-cancel-booking]");
+
+  if (cancelButton) {
+    var bookingId = cancelButton.dataset.cancelBooking;
+    var confirmed = confirm("Are you sure you want to cancel this booking?");
+
+    if (confirmed) {
+      cancelBooking(bookingId);
+    }
   }
 });
 
@@ -764,6 +1240,11 @@ registerFields.forEach(function (field) {
   });
 });
 
+// Recalculate total when ticket count changes
+regTickets.addEventListener("change", function () {
+  updateBookingSummary();
+});
+
 registerForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -795,6 +1276,17 @@ registerForm.addEventListener("submit", function (event) {
   });
   var ticketCount = Number(regTickets.value);
   var ticketText = ticketCount === 1 ? "1 ticket" : ticketCount + " tickets";
+
+  // Save booking to localStorage
+  createBooking(
+    currentEventId,
+    regName.value.trim(),
+    regEmail.value.trim(),
+    regPhone.value.trim(),
+    ticketCount
+  );
+
+  renderBookings();
 
   successEvent.textContent = selectedEvent ? selectedEvent.title : "your event";
   successNote.textContent = ticketText + " · Confirmation sent to " + regEmail.value.trim();
@@ -968,3 +1460,6 @@ signupForm.addEventListener("submit", function (event) {
 updateAuthUI();
 renderEvents();
 renderTrending();
+renderRecentlyViewed();
+renderBookings();
+updateCategoryCounts();

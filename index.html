@@ -26,6 +26,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#events">Events</a></li>
           <li><a href="#categories">Categories</a></li>
+          <li><a href="#myBookings">My Bookings</a></li>
           <li><a href="#about">About</a></li>
         </ul>
         <div class="nav-buttons">
@@ -68,6 +69,28 @@
     </div>
   </section>
 
+  <!-- ================= TRENDING ================= -->
+  <section class="section trending" id="trending">
+    <div class="container">
+      <div class="section-head">
+        <h2>Trending Now</h2>
+        <p>The most popular events this week — grab your spot before they sell out.</p>
+      </div>
+      <div class="trending-grid" id="trendingGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================= RECENTLY VIEWED ================= -->
+  <section class="section" id="recentlyViewed" hidden>
+    <div class="container">
+      <div class="section-head">
+        <h2>Recently Viewed</h2>
+        <p>Events you've recently checked out.</p>
+      </div>
+      <div class="events-grid" id="recentlyViewedGrid"></div>
+    </div>
+  </section>
+
   <!-- ================= FEATURED EVENTS ================= -->
   <section class="section" id="events">
     <div class="container">
@@ -85,6 +108,21 @@
         <button class="filter-btn" data-category="Workshops" type="button">Workshops</button>
         <button class="filter-btn" data-category="Education" type="button">Education</button>
         <button class="filter-btn saved-btn" id="savedBtn" type="button" aria-pressed="false">♥ Saved (0)</button>
+      </div>
+
+      <div class="filter-controls">
+        <div class="sort-control">
+          <label for="sortSelect">Sort by Price:</label>
+          <select id="sortSelect" class="sort-select">
+            <option value="none">Default</option>
+            <option value="low-to-high">Low to High</option>
+            <option value="high-to-low">High to Low</option>
+          </select>
+        </div>
+        <div class="event-count-display">
+          <span id="eventCount">0 events found</span>
+        </div>
+        <button class="btn btn-outline btn-small" id="clearAllFilters" type="button">Clear All Filters</button>
       </div>
 
       <div class="events-grid" id="eventGrid"></div>
@@ -139,14 +177,19 @@
     </div>
   </section>
 
-  <!-- ================= TRENDING ================= -->
-  <section class="section trending" id="trending">
+  <!-- ================= MY BOOKINGS ================= -->
+  <section class="section" id="myBookings">
     <div class="container">
       <div class="section-head">
-        <h2>Trending Now</h2>
-        <p>The most popular events this week — grab your spot before they sell out.</p>
+        <h2>My Bookings</h2>
+        <p>Your confirmed event registrations.</p>
       </div>
-      <div class="trending-grid" id="trendingGrid"></div>
+
+      <div id="bookingsGrid" class="bookings-grid"></div>
+
+      <div class="no-results" id="noBookings" hidden>
+        <p>You haven't booked any events yet. Browse events and register to see your bookings here.</p>
+      </div>
     </div>
   </section>
 
@@ -210,6 +253,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#events">Events</a></li>
           <li><a href="#categories">Categories</a></li>
+          <li><a href="#myBookings">My Bookings</a></li>
           <li><a href="#about">About</a></li>
         </ul>
       </div>
@@ -291,6 +335,26 @@
                 <option value="5">5 tickets</option>
               </select>
               <span class="field-error" id="regTicketsError"></span>
+            </div>
+
+            <div class="booking-summary" id="bookingSummary">
+              <h3>Booking Summary</h3>
+              <div class="summary-row">
+                <span>Event</span>
+                <span id="summaryEventName">—</span>
+              </div>
+              <div class="summary-row">
+                <span>Ticket Price</span>
+                <span id="summaryTicketPrice">—</span>
+              </div>
+              <div class="summary-row">
+                <span>Quantity</span>
+                <span id="summaryQuantity">1</span>
+              </div>
+              <div class="summary-row summary-total">
+                <span>Total Amount</span>
+                <span id="summaryTotal">—</span>
+              </div>
             </div>
 
             <button class="btn btn-full" type="submit">Confirm Registration</button>

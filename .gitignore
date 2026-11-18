@@ -10,6 +10,9 @@ Desktop.ini
 # Dependencies (not used by this static project)
 node_modules/
 
+#claude
+$HOME/
+
 # Logs and temp files
 *.log
 *.tmp
