@@ -16,6 +16,7 @@
 
   <!-- ================= HEADER ================= -->
   <header class="header">
+    <div class="scroll-progress" aria-hidden="true"></div>
     <nav class="container nav">
       <a href="#home" class="logo" aria-label="AK home">
         <img src="images/logo.svg" alt="AK logo" class="logo-icon">
@@ -26,6 +27,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#events">Events</a></li>
           <li><a href="#categories">Categories</a></li>
+          <li><a href="#myDashboard">Dashboard</a></li>
           <li><a href="#myBookings">My Bookings</a></li>
           <li><a href="#about">About</a></li>
         </ul>
@@ -69,10 +71,12 @@
     </div>
   </section>
 
+  <div class="deck-stack">
+
   <!-- ================= TRENDING ================= -->
-  <section class="section trending" id="trending">
+  <section class="section trending" id="trending" data-deck="sticky" style="--z:1">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Trending Now</h2>
         <p>The most popular events this week — grab your spot before they sell out.</p>
       </div>
@@ -80,21 +84,21 @@
     </div>
   </section>
 
-  <!-- ================= RECENTLY VIEWED ================= -->
-  <section class="section" id="recentlyViewed" hidden>
+  <!-- ================= RECENTLY VIEWED ================= 
+  <section class="section" id="recentlyViewed" data-deck="sticky" style="--z:2" hidden>
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Recently Viewed</h2>
         <p>Events you've recently checked out.</p>
       </div>
       <div class="events-grid" id="recentlyViewedGrid"></div>
     </div>
   </section>
-
+-->
   <!-- ================= FEATURED EVENTS ================= -->
-  <section class="section" id="events">
+  <section class="section" id="events" data-deck="sticky" style="--z:3">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Featured Events</h2>
         <p>Handpicked events happening in the next few weeks.</p>
       </div>
@@ -135,40 +139,40 @@
   </section>
 
   <!-- ================= CATEGORIES ================= -->
-  <section class="section categories" id="categories">
+  <section class="section categories" id="categories" data-deck="sticky" style="--z:4">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <h2>Browse by Category</h2>
         <p>Find events that match your interests.</p>
       </div>
 
       <div class="category-grid">
-        <button class="category-card" data-category="Technology" type="button">
+        <button class="category-card reveal" data-category="Technology" type="button">
           <span class="cat-icon">💻</span>
           <h3>Technology</h3>
           <p>1 Events</p>
         </button>
-        <button class="category-card" data-category="Music" type="button">
+        <button class="category-card reveal" data-category="Music" type="button">
           <span class="cat-icon">🎵</span>
           <h3>Music</h3>
           <p>1 Events</p>
         </button>
-        <button class="category-card" data-category="Business" type="button">
+        <button class="category-card reveal" data-category="Business" type="button">
           <span class="cat-icon">💼</span>
           <h3>Business</h3>
           <p>1 Events</p>
         </button>
-        <button class="category-card" data-category="Sports" type="button">
+        <button class="category-card reveal" data-category="Sports" type="button">
           <span class="cat-icon">⚽</span>
           <h3>Sports</h3>
           <p>1 Events</p>
         </button>
-        <button class="category-card" data-category="Workshops" type="button">
+        <button class="category-card reveal" data-category="Workshops" type="button">
           <span class="cat-icon">🛠️</span>
           <h3>Workshops</h3>
           <p>1 Events</p>
         </button>
-        <button class="category-card" data-category="Education" type="button">
+        <button class="category-card reveal" data-category="Education" type="button">
           <span class="cat-icon">🎓</span>
           <h3>Education</h3>
           <p>1 Events</p>
@@ -177,15 +181,100 @@
     </div>
   </section>
 
-  <!-- ================= MY BOOKINGS ================= -->
-  <section class="section" id="myBookings">
+  <!-- ================= MY DASHBOARD ================= -->
+  <section class="section" id="myDashboard" data-deck="sticky" style="--z:5">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
+        <h2>My Dashboard</h2>
+        <p>Your booking overview and statistics.</p>
+      </div>
+
+      <div class="dashboard-stats">
+        <div class="stat-card reveal">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <h3 id="totalBookingsCount">0</h3>
+            <p>Total Bookings</p>
+          </div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-icon">🎫</div>
+          <div class="stat-content">
+            <h3 id="upcomingEventsCount">0</h3>
+            <p>Upcoming Events</p>
+          </div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-icon">❌</div>
+          <div class="stat-content">
+            <h3 id="cancelledBookingsCount">0</h3>
+            <p>Cancelled Bookings</p>
+          </div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-icon">💰</div>
+          <div class="stat-content">
+            <h3 id="totalAmountSpent">₹0</h3>
+            <p>Total Amount Spent</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h3 class="dashboard-subtitle">Recently Viewed Events</h3>
+        <div class="events-grid" id="dashboardRecentlyViewed"></div>
+        <div class="no-results" id="noDashboardRecentlyViewed" hidden>
+          <p>No recently viewed events.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MY BOOKINGS ================= -->
+  <section class="section" id="myBookings" data-deck="sticky" style="--z:6">
+    <div class="container">
+      <div class="section-head reveal">
         <h2>My Bookings</h2>
         <p>Your confirmed event registrations.</p>
       </div>
 
-      <div id="bookingsGrid" class="bookings-grid"></div>
+      <div class="bookings-summary reveal">
+        <div class="summary-item">
+          <span class="summary-label">Total Bookings:</span>
+          <span class="summary-value" id="summaryTotalBookings">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Total Amount:</span>
+          <span class="summary-value primary" id="summaryTotalAmount">₹0</span>
+        </div>
+      </div>
+
+      <div class="bookings-controls reveal">
+        <input type="text" id="bookingSearchInput" placeholder="Search by event name..." aria-label="Search bookings">
+        <div class="bookings-filter-group">
+          <button class="filter-btn active" id="filterAllBookings" type="button">All</button>
+          <button class="filter-btn" id="filterConfirmedBookings" type="button">Confirmed</button>
+          <button class="filter-btn" id="filterCancelledBookings" type="button">Cancelled</button>
+        </div>
+        <button class="btn btn-outline btn-small" id="exportBookingsCSV" type="button">📥 Export CSV</button>
+      </div>
+
+      <div class="bookings-table-container" id="bookingsTableContainer">
+        <table class="bookings-table">
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Event</th>
+              <th>Date & Time</th>
+              <th>Tickets</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bookingsTableBody"></tbody>
+        </table>
+      </div>
 
       <div class="no-results" id="noBookings" hidden>
         <p>You haven't booked any events yet. Browse events and register to see your bookings here.</p>
@@ -194,7 +283,7 @@
   </section>
 
   <!-- ================= ABOUT ================= -->
-  <section class="section" id="about">
+  <section class="section" id="about" data-deck="sticky" style="--z:6">
     <div class="container about">
       <img src="images/hero-stage.jpg" alt="Concert crowd in front of a bright stage">
       <div class="about-text">
@@ -216,6 +305,9 @@
       </div>
     </div>
   </section>
+
+  </div>
+  <!-- /.deck-stack -->
 
   <!-- ================= NEWSLETTER ================= -->
   <section class="newsletter" id="newsletter">
@@ -253,6 +345,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#events">Events</a></li>
           <li><a href="#categories">Categories</a></li>
+          <li><a href="#myDashboard">Dashboard</a></li>
           <li><a href="#myBookings">My Bookings</a></li>
           <li><a href="#about">About</a></li>
         </ul>
@@ -337,7 +430,7 @@
               <span class="field-error" id="regTicketsError"></span>
             </div>
 
-            <div class="booking-summary" id="bookingSummary">
+            <div class="booking-summary">
               <h3>Booking Summary</h3>
               <div class="summary-row">
                 <span>Event</span>
@@ -366,6 +459,69 @@
             <button class="btn" id="registerDone" type="button">Done</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= EDIT BOOKING MODAL ================= -->
+  <div class="modal" id="editBookingModal" role="dialog" aria-modal="true" aria-labelledby="editBookingTitle">
+    <div class="modal-box auth-box">
+      <button class="modal-close" id="editBookingClose" type="button" aria-label="Close edit booking">✕</button>
+      <div class="modal-body">
+        <h2 id="editBookingTitle">Edit Booking</h2>
+        <p class="auth-subtitle" id="editBookingSubtitle"></p>
+
+        <form id="editBookingForm" novalidate>
+          <input type="hidden" id="editBookingId">
+
+          <div class="form-group">
+            <label for="editName">Full name</label>
+            <input type="text" id="editName" placeholder="e.g. Aarav Sharma" autocomplete="name" aria-describedby="editNameError">
+            <span class="field-error" id="editNameError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="editEmail">Email address</label>
+            <input type="email" id="editEmail" placeholder="you@example.com" autocomplete="email" aria-describedby="editEmailError">
+            <span class="field-error" id="editEmailError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="editPhone">Mobile number</label>
+            <input type="tel" id="editPhone" placeholder="10-digit mobile number" autocomplete="tel" aria-describedby="editPhoneError">
+            <span class="field-error" id="editPhoneError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="editTickets">Number of tickets</label>
+            <select id="editTickets" aria-describedby="editTicketsError">
+              <option value="1">1 ticket</option>
+              <option value="2">2 tickets</option>
+              <option value="3">3 tickets</option>
+              <option value="4">4 tickets</option>
+              <option value="5">5 tickets</option>
+            </select>
+            <span class="field-error" id="editTicketsError"></span>
+          </div>
+
+          <div class="booking-summary">
+            <h3>Updated Booking Summary</h3>
+            <div class="summary-row">
+              <span>Ticket Price</span>
+              <span id="editSummaryTicketPrice">—</span>
+            </div>
+            <div class="summary-row">
+              <span>Quantity</span>
+              <span id="editSummaryQuantity">1</span>
+            </div>
+            <div class="summary-row summary-total">
+              <span>Total Amount</span>
+              <span id="editSummaryTotal">—</span>
+            </div>
+          </div>
+
+          <button class="btn btn-full" type="submit">Save Changes</button>
+        </form>
       </div>
     </div>
   </div>
@@ -438,6 +594,22 @@
         <div class="register-success" id="authSuccess" hidden>
           <p id="authSuccessText"></p>
           <button class="btn" id="authDone" type="button">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CONFIRM MODAL ================= -->
+  <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-box auth-box">
+      <button class="modal-close" id="confirmClose" type="button" aria-label="Close">✕</button>
+      <div class="modal-body confirm-body">
+        <div class="confirm-icon" id="confirmIcon">⚠️</div>
+        <h2 id="confirmTitle">Are you sure?</h2>
+        <p class="auth-subtitle" id="confirmMessage"></p>
+        <div class="confirm-actions">
+          <button class="btn btn-outline" id="confirmCancel" type="button">Keep it</button>
+          <button class="btn btn-danger" id="confirmOk" type="button">Yes, continue</button>
         </div>
       </div>
     </div>

@@ -236,165 +236,129 @@ const trending = [
 
 const allEvents = events.concat(trending);
 
+function findEvent(id) {
+  return allEvents.find(function (item) { return item.id === id; });
+}
+
+function loadStore(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || fallback;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function saveStore(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    // localStorage may be blocked in some browsers.
+  }
+}
+
 // ---------- Page state ----------
 let currentCategory = "all";
 let searchTerm = "";
 let locationTerm = "";
 let showSaved = false;
-let favorites = [];
+let favorites = loadStore("akFavorites", []);
 let currentEventId = null;
-let currentUser = null;
+let currentUser = loadStore("akUser", null);
 let sortOrder = "none"; // "none", "low-to-high", "high-to-low"
-let recentlyViewed = [];
-let bookings = [];
-
-try {
-  favorites = JSON.parse(localStorage.getItem("akFavorites")) || [];
-} catch (error) {
-  favorites = [];
-}
-
-try {
-  currentUser = JSON.parse(localStorage.getItem("akUser")) || null;
-} catch (error) {
-  currentUser = null;
-}
-
-try {
-  recentlyViewed = JSON.parse(localStorage.getItem("akRecentlyViewed")) || [];
-} catch (error) {
-  recentlyViewed = [];
-}
-
-try {
-  bookings = JSON.parse(localStorage.getItem("akBookings")) || [];
-} catch (error) {
-  bookings = [];
-}
+let recentlyViewed = loadStore("akRecentlyViewed", []);
+let bookings = loadStore("akBookings", []);
+let bookingSearchTerm = "";
+let bookingStatusFilter = "all"; // "all", "confirmed", "cancelled"
 
 // ---------- Elements ----------
-const eventGrid = document.getElementById("eventGrid");
-const trendingGrid = document.getElementById("trendingGrid");
-const recentlyViewedGrid = document.getElementById("recentlyViewedGrid");
-const recentlyViewedSection = document.getElementById("recentlyViewed");
-const noResults = document.getElementById("noResults");
-const noResultsText = document.getElementById("noResultsText");
-const searchForm = document.getElementById("searchForm");
-const searchInput = document.getElementById("searchInput");
-const locationInput = document.getElementById("locationInput");
-const savedBtn = document.getElementById("savedBtn");
-const clearFilters = document.getElementById("clearFilters");
+const byId = function (id) { return document.getElementById(id); };
 
-const modal = document.getElementById("eventModal");
-const modalImg = document.getElementById("modalImg");
-const modalCategory = document.getElementById("modalCategory");
-const modalTitle = document.getElementById("modalTitle");
-const modalDesc = document.getElementById("modalDesc");
-const modalDate = document.getElementById("modalDate");
-const modalLocation = document.getElementById("modalLocation");
-const modalPrice = document.getElementById("modalPrice");
-const modalClose = document.getElementById("modalClose");
-const modalRegister = document.getElementById("modalRegister");
+const eventGrid = byId("eventGrid"), trendingGrid = byId("trendingGrid"),
+  recentlyViewedGrid = byId("recentlyViewedGrid"), recentlyViewedSection = byId("recentlyViewed"),
+  noResults = byId("noResults"), noResultsText = byId("noResultsText"),
+  searchForm = byId("searchForm"), searchInput = byId("searchInput"),
+  locationInput = byId("locationInput"), savedBtn = byId("savedBtn"), clearFilters = byId("clearFilters");
 
-const eventDetails = document.getElementById("eventDetails");
-const registerPanel = document.getElementById("registerPanel");
-const backToDetails = document.getElementById("backToDetails");
-const regEventTitle = document.getElementById("regEventTitle");
-const regEventInfo = document.getElementById("regEventInfo");
-const registerForm = document.getElementById("registerForm");
-const registerSuccess = document.getElementById("registerSuccess");
-const successEvent = document.getElementById("successEvent");
-const successNote = document.getElementById("successNote");
-const registerDone = document.getElementById("registerDone");
-const regName = document.getElementById("regName");
-const regEmail = document.getElementById("regEmail");
-const regPhone = document.getElementById("regPhone");
-const regTickets = document.getElementById("regTickets");
-const regNameError = document.getElementById("regNameError");
-const regEmailError = document.getElementById("regEmailError");
-const regPhoneError = document.getElementById("regPhoneError");
-const regTicketsError = document.getElementById("regTicketsError");
+const modal = byId("eventModal"), modalImg = byId("modalImg"),
+  modalCategory = byId("modalCategory"), modalTitle = byId("modalTitle"),
+  modalDesc = byId("modalDesc"), modalDate = byId("modalDate"),
+  modalLocation = byId("modalLocation"), modalPrice = byId("modalPrice"),
+  modalClose = byId("modalClose"), modalRegister = byId("modalRegister");
 
-const summaryEventName = document.getElementById("summaryEventName");
-const summaryTicketPrice = document.getElementById("summaryTicketPrice");
-const summaryQuantity = document.getElementById("summaryQuantity");
-const summaryTotal = document.getElementById("summaryTotal");
+const eventDetails = byId("eventDetails"), registerPanel = byId("registerPanel"),
+  backToDetails = byId("backToDetails"), regEventTitle = byId("regEventTitle"),
+  regEventInfo = byId("regEventInfo"), registerForm = byId("registerForm"),
+  registerSuccess = byId("registerSuccess"), successEvent = byId("successEvent"),
+  successNote = byId("successNote"), registerDone = byId("registerDone"),
+  regName = byId("regName"), regEmail = byId("regEmail"),
+  regPhone = byId("regPhone"), regTickets = byId("regTickets"),
+  regNameError = byId("regNameError"), regEmailError = byId("regEmailError"),
+  regPhoneError = byId("regPhoneError"), regTicketsError = byId("regTicketsError");
 
-const bookingsGrid = document.getElementById("bookingsGrid");
-const noBookings = document.getElementById("noBookings");
+const summaryEventName = byId("summaryEventName"), summaryTicketPrice = byId("summaryTicketPrice"),
+  summaryQuantity = byId("summaryQuantity"), summaryTotal = byId("summaryTotal");
 
-const registerFields = [
-  { input: regName, error: regNameError },
-  { input: regEmail, error: regEmailError },
-  { input: regPhone, error: regPhoneError },
-  { input: regTickets, error: regTicketsError }
-];
+const bookingsGrid = byId("bookingsGrid"), noBookings = byId("noBookings"),
+  bookingsTableBody = byId("bookingsTableBody"), bookingsTableContainer = byId("bookingsTableContainer"),
+  summaryTotalBookings = byId("summaryTotalBookings"), summaryTotalAmount = byId("summaryTotalAmount"),
+  bookingSearchInput = byId("bookingSearchInput"), filterAllBookings = byId("filterAllBookings"),
+  filterConfirmedBookings = byId("filterConfirmedBookings"), filterCancelledBookings = byId("filterCancelledBookings"),
+  exportBookingsCSV = byId("exportBookingsCSV");
 
-const newsletterForm = document.getElementById("newsletterForm");
-const emailInput = document.getElementById("emailInput");
-const newsletterMsg = document.getElementById("newsletterMsg");
+// Dashboard elements
+const totalBookingsCount = byId("totalBookingsCount"), upcomingEventsCount = byId("upcomingEventsCount"),
+  cancelledBookingsCount = byId("cancelledBookingsCount"), totalAmountSpent = byId("totalAmountSpent"),
+  dashboardRecentlyViewed = byId("dashboardRecentlyViewed"), noDashboardRecentlyViewed = byId("noDashboardRecentlyViewed");
 
-const menuBtn = document.getElementById("menuBtn");
-const navMenu = document.getElementById("navMenu");
+// Edit booking modal
+const editBookingModal = byId("editBookingModal"), editBookingClose = byId("editBookingClose"),
+  editBookingForm = byId("editBookingForm"), editBookingId = byId("editBookingId"),
+  editName = byId("editName"), editEmail = byId("editEmail"),
+  editPhone = byId("editPhone"), editTickets = byId("editTickets"),
+  editNameError = byId("editNameError"), editEmailError = byId("editEmailError"),
+  editPhoneError = byId("editPhoneError"), editTicketsError = byId("editTicketsError"),
+  editBookingSubtitle = byId("editBookingSubtitle"), editSummaryTicketPrice = byId("editSummaryTicketPrice"),
+  editSummaryQuantity = byId("editSummaryQuantity"), editSummaryTotal = byId("editSummaryTotal");
 
-const loginBtn = document.getElementById("loginBtn");
-const signupBtn = document.getElementById("signupBtn");
+function fieldsFor() {
+  return Array.prototype.map.call(arguments, function (input) {
+    return { input: input, error: byId(input.id + "Error") };
+  });
+}
 
-const authModal = document.getElementById("authModal");
-const authClose = document.getElementById("authClose");
-const loginPanel = document.getElementById("loginPanel");
-const signupPanel = document.getElementById("signupPanel");
-const loginForm = document.getElementById("loginForm");
-const signupForm = document.getElementById("signupForm");
-const loginEmail = document.getElementById("loginEmail");
-const loginPassword = document.getElementById("loginPassword");
-const loginEmailError = document.getElementById("loginEmailError");
-const loginPasswordError = document.getElementById("loginPasswordError");
-const signupName = document.getElementById("signupName");
-const signupEmail = document.getElementById("signupEmail");
-const signupPassword = document.getElementById("signupPassword");
-const signupConfirm = document.getElementById("signupConfirm");
-const signupNameError = document.getElementById("signupNameError");
-const signupEmailError = document.getElementById("signupEmailError");
-const signupPasswordError = document.getElementById("signupPasswordError");
-const signupConfirmError = document.getElementById("signupConfirmError");
-const showSignup = document.getElementById("showSignup");
-const showLogin = document.getElementById("showLogin");
-const authSuccess = document.getElementById("authSuccess");
-const authSuccessText = document.getElementById("authSuccessText");
-const authDone = document.getElementById("authDone");
+const editBookingFields = fieldsFor(editName, editEmail, editPhone, editTickets);
+const registerFields = fieldsFor(regName, regEmail, regPhone, regTickets);
 
-const loginFields = [
-  { input: loginEmail, error: loginEmailError },
-  { input: loginPassword, error: loginPasswordError }
-];
+const newsletterForm = byId("newsletterForm"), emailInput = byId("emailInput"),
+  newsletterMsg = byId("newsletterMsg"), menuBtn = byId("menuBtn"), navMenu = byId("navMenu"),
+  loginBtn = byId("loginBtn"), signupBtn = byId("signupBtn");
 
-const signupFields = [
-  { input: signupName, error: signupNameError },
-  { input: signupEmail, error: signupEmailError },
-  { input: signupPassword, error: signupPasswordError },
-  { input: signupConfirm, error: signupConfirmError }
-];
+const authModal = byId("authModal"), authClose = byId("authClose"),
+  loginPanel = byId("loginPanel"), signupPanel = byId("signupPanel"),
+  loginForm = byId("loginForm"), signupForm = byId("signupForm"),
+  loginEmail = byId("loginEmail"), loginPassword = byId("loginPassword"),
+  loginEmailError = byId("loginEmailError"), loginPasswordError = byId("loginPasswordError"),
+  signupName = byId("signupName"), signupEmail = byId("signupEmail"),
+  signupPassword = byId("signupPassword"), signupConfirm = byId("signupConfirm"),
+  signupNameError = byId("signupNameError"), signupEmailError = byId("signupEmailError"),
+  signupPasswordError = byId("signupPasswordError"), signupConfirmError = byId("signupConfirmError"),
+  showSignup = byId("showSignup"), showLogin = byId("showLogin"),
+  authSuccess = byId("authSuccess"), authSuccessText = byId("authSuccessText"), authDone = byId("authDone");
+
+const confirmModal = byId("confirmModal"), confirmClose = byId("confirmClose"),
+  confirmCancelBtn = byId("confirmCancel"), confirmOk = byId("confirmOk"),
+  confirmIcon = byId("confirmIcon"), confirmTitle = byId("confirmTitle"),
+  confirmMessage = byId("confirmMessage");
+let confirmAction = null;
+
+const loginFields = fieldsFor(loginEmail, loginPassword);
+const signupFields = fieldsFor(signupName, signupEmail, signupPassword, signupConfirm);
 
 const authFields = loginFields.concat(signupFields);
 
-// ---------- Favourites ----------
-function saveFavorites() {
-  try {
-    localStorage.setItem("akFavorites", JSON.stringify(favorites));
-  } catch (error) {
-    // localStorage may be blocked in some browsers.
-  }
-}
-
-// ---------- Recently Viewed ----------
-function saveRecentlyViewed() {
-  try {
-    localStorage.setItem("akRecentlyViewed", JSON.stringify(recentlyViewed));
-  } catch (error) {
-    // localStorage may be blocked in some browsers.
-  }
-}
+// ---------- Favourites / Recently Viewed ----------
+function saveFavorites() { saveStore("akFavorites", favorites); }
+function saveRecentlyViewed() { saveStore("akRecentlyViewed", recentlyViewed); }
 
 function addToRecentlyViewed(id) {
   // Remove if already exists
@@ -412,6 +376,7 @@ function addToRecentlyViewed(id) {
 
   saveRecentlyViewed();
   renderRecentlyViewed();
+  updateDashboard();
 }
 
 function toggleFavorite(id) {
@@ -426,6 +391,7 @@ function toggleFavorite(id) {
   saveFavorites();
   renderEvents();
   renderRecentlyViewed(); // Update recently viewed if favorites changed
+  updateDashboard();
 }
 
 // ---------- Filtering & Sorting ----------
@@ -488,9 +454,7 @@ function formatPrice(price) {
 
 // ---------- Booking Summary ----------
 function updateBookingSummary() {
-  var event = allEvents.find(function (item) {
-    return item.id === currentEventId;
-  });
+  var event = findEvent(currentEventId);
 
   if (!event) {
     return;
@@ -501,28 +465,14 @@ function updateBookingSummary() {
   summaryEventName.textContent = event.title;
   summaryTicketPrice.textContent = formatPrice(event.price);
   summaryQuantity.textContent = ticketCount;
-
-  if (event.price === 0) {
-    summaryTotal.textContent = "Free";
-  } else {
-    var total = event.price * ticketCount;
-    summaryTotal.textContent = "₹" + total.toLocaleString("en-IN");
-  }
+  summaryTotal.textContent = formatPrice(event.price * ticketCount);
 }
 
 // ---------- Bookings ----------
-function saveBookings() {
-  try {
-    localStorage.setItem("akBookings", JSON.stringify(bookings));
-  } catch (error) {
-    // localStorage may be blocked in some browsers.
-  }
-}
+function saveBookings() { saveStore("akBookings", bookings); }
 
 function createBooking(eventId, name, email, phone, ticketCount) {
-  var event = allEvents.find(function (item) {
-    return item.id === eventId;
-  });
+  var event = findEvent(eventId);
 
   if (!event) {
     return null;
@@ -550,74 +500,216 @@ function createBooking(eventId, name, email, phone, ticketCount) {
     customerName: name,
     customerEmail: email,
     customerPhone: phone,
-    status: "confirmed"
+    status: "Confirmed"
   };
 
   bookings.unshift(booking);
   saveBookings();
+  updateDashboard();
   return booking;
 }
 
+function editBooking(bookingId, name, email, phone, ticketCount) {
+  var bookingIndex = bookings.findIndex(function (booking) {
+    return booking.id === bookingId;
+  });
+
+  if (bookingIndex === -1) {
+    return null;
+  }
+
+  var booking = bookings[bookingIndex];
+  var totalAmount = booking.ticketPrice * ticketCount;
+
+  bookings[bookingIndex] = {
+    id: booking.id,
+    eventId: booking.eventId,
+    eventTitle: booking.eventTitle,
+    eventDate: booking.eventDate,
+    eventTime: booking.eventTime,
+    venue: booking.venue,
+    location: booking.location,
+    ticketPrice: booking.ticketPrice,
+    ticketCount: ticketCount,
+    totalAmount: totalAmount,
+    bookingDate: booking.bookingDate,
+    customerName: name,
+    customerEmail: email,
+    customerPhone: phone,
+    status: booking.status
+  };
+
+  saveBookings();
+  return bookings[bookingIndex];
+}
+
 function cancelBooking(bookingId) {
+  var bookingIndex = bookings.findIndex(function (booking) {
+    return booking.id === bookingId;
+  });
+
+  if (bookingIndex !== -1) {
+    bookings[bookingIndex].status = "Cancelled";
+    saveBookings();
+    renderBookings();
+    updateDashboard();
+  }
+}
+
+function deleteBooking(bookingId) {
   bookings = bookings.filter(function (booking) {
     return booking.id !== bookingId;
   });
 
   saveBookings();
   renderBookings();
+  updateDashboard();
+}
+
+function getFilteredBookings() {
+  return bookings.filter(function (booking) {
+    // Search filter
+    if (bookingSearchTerm) {
+      var eventName = booking.eventTitle.toLowerCase();
+      if (!eventName.includes(bookingSearchTerm)) {
+        return false;
+      }
+    }
+
+    // Status filter
+    if (bookingStatusFilter !== "all") {
+      if (bookingStatusFilter === "confirmed" && booking.status !== "Confirmed") {
+        return false;
+      }
+      if (bookingStatusFilter === "cancelled" && booking.status !== "Cancelled") {
+        return false;
+      }
+    }
+
+    return true;
+  });
 }
 
 function renderBookings() {
-  if (!bookingsGrid || !noBookings) {
+  if (!bookingsTableBody || !noBookings || !bookingsTableContainer) {
     return;
   }
 
   if (bookings.length === 0) {
-    bookingsGrid.innerHTML = "";
+    bookingsTableBody.innerHTML = "";
+    bookingsTableContainer.hidden = true;
     noBookings.hidden = false;
+    if (summaryTotalBookings) summaryTotalBookings.textContent = "0";
+    if (summaryTotalAmount) summaryTotalAmount.textContent = "₹0";
+    return;
+  }
+
+  var filteredBookings = getFilteredBookings();
+
+  // Calculate totals (from all bookings, not just filtered)
+  var totalBookings = bookings.length;
+  var totalAmount = bookings
+    .filter(function (b) { return b.status === "Confirmed"; })
+    .reduce(function (sum, b) { return sum + b.totalAmount; }, 0);
+
+  if (summaryTotalBookings) summaryTotalBookings.textContent = totalBookings;
+  if (summaryTotalAmount) summaryTotalAmount.textContent = formatPrice(totalAmount);
+
+  // Show message if no filtered results
+  if (filteredBookings.length === 0) {
+    bookingsTableBody.innerHTML = "";
+    bookingsTableContainer.hidden = true;
+    noBookings.hidden = false;
+    noBookings.querySelector("p").textContent = "No bookings match your search or filter.";
     return;
   }
 
   noBookings.hidden = true;
+  bookingsTableContainer.hidden = false;
 
-  bookingsGrid.innerHTML = bookings
+  bookingsTableBody.innerHTML = filteredBookings
     .map(function (booking) {
+      var statusClass = booking.status.toLowerCase();
+      var actionsHtml = booking.status === "Confirmed"
+        ? '<div class="booking-actions">' +
+            '<button class="btn-edit" type="button" data-edit-booking="' + booking.id + '">Edit</button>' +
+            '<button class="btn-delete" type="button" data-cancel-booking="' + booking.id + '">Cancel</button>' +
+          '</div>'
+        : '<div class="booking-actions">' +
+            '<button class="btn-delete" type="button" data-delete-booking="' + booking.id + '">Delete</button>' +
+          '</div>';
+
       return (
-        '<div class="booking-card">' +
-          '<div class="booking-card-header">' +
-            '<h3>' + booking.eventTitle + '</h3>' +
-            '<span class="booking-status">CONFIRMED</span>' +
-          '</div>' +
-          '<div class="booking-card-body">' +
-            '<div class="booking-detail">' +
-              '<span class="booking-detail-label">Event Date</span>' +
-              '<span class="booking-detail-value">' + booking.eventDate + ' · ' + booking.eventTime + '</span>' +
-            '</div>' +
-            '<div class="booking-detail">' +
-              '<span class="booking-detail-label">Booking Date</span>' +
-              '<span class="booking-detail-value">' + booking.bookingDate + '</span>' +
-            '</div>' +
-            '<div class="booking-detail">' +
-              '<span class="booking-detail-label">Venue</span>' +
-              '<span class="booking-detail-value">' + booking.venue + ', ' + booking.location + '</span>' +
-            '</div>' +
-            '<div class="booking-detail">' +
-              '<span class="booking-detail-label">Tickets</span>' +
-              '<span class="booking-detail-value">' + booking.ticketCount + ' × ' + formatPrice(booking.ticketPrice) + '</span>' +
-            '</div>' +
-            '<div class="booking-detail">' +
-              '<span class="booking-detail-label">Total Amount</span>' +
-              '<span class="booking-detail-value total-amount">' + formatPrice(booking.totalAmount) + '</span>' +
-            '</div>' +
-          '</div>' +
-          '<div class="booking-card-footer">' +
-            '<span class="booking-id">Booking ID: ' + booking.id + '</span>' +
-            '<button class="btn-cancel" type="button" data-cancel-booking="' + booking.id + '">Cancel Booking</button>' +
-          '</div>' +
-        '</div>'
+        '<tr>' +
+          '<td class="booking-id-cell">' + booking.id + '</td>' +
+          '<td class="event-name-cell">' + booking.eventTitle + '</td>' +
+          '<td>' + booking.eventDate + '<br><small style="color: #888;">' + booking.eventTime + '</small></td>' +
+          '<td>' + booking.ticketCount + ' × ' + formatPrice(booking.ticketPrice) + '</td>' +
+          '<td class="amount-cell">' + formatPrice(booking.totalAmount) + '</td>' +
+          '<td><span class="status-badge ' + statusClass + '">' + booking.status + '</span></td>' +
+          '<td>' + actionsHtml + '</td>' +
+        '</tr>'
       );
     })
     .join("");
+  refreshScrollEffects();
+}
+
+function updateBookingFilterButtons() {
+  if (!filterAllBookings || !filterConfirmedBookings || !filterCancelledBookings) {
+    return;
+  }
+
+  filterAllBookings.classList.toggle("active", bookingStatusFilter === "all");
+  filterConfirmedBookings.classList.toggle("active", bookingStatusFilter === "confirmed");
+  filterCancelledBookings.classList.toggle("active", bookingStatusFilter === "cancelled");
+}
+
+function exportBookingsToCSV() {
+  var filteredBookings = getFilteredBookings();
+
+  if (filteredBookings.length === 0) {
+    alert("No bookings to export.");
+    return;
+  }
+
+  // CSV header
+  var csvContent = "Booking ID,Event Name,Event Date,Event Time,Venue,Location,Customer Name,Email,Phone,Tickets,Ticket Price,Total Amount,Booking Date,Status\n";
+
+  // CSV rows
+  filteredBookings.forEach(function (booking) {
+    var row = [
+      booking.id,
+      '"' + booking.eventTitle.replace(/"/g, '""') + '"',
+      booking.eventDate,
+      booking.eventTime,
+      '"' + booking.venue.replace(/"/g, '""') + '"',
+      '"' + booking.location.replace(/"/g, '""') + '"',
+      '"' + booking.customerName.replace(/"/g, '""') + '"',
+      booking.customerEmail,
+      booking.customerPhone,
+      booking.ticketCount,
+      booking.ticketPrice,
+      booking.totalAmount,
+      booking.bookingDate,
+      booking.status
+    ].join(",");
+
+    csvContent += row + "\n";
+  });
+
+  // Create download link
+  var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  var link = document.createElement("a");
+  var url = URL.createObjectURL(blob);
+
+  link.setAttribute("href", url);
+  link.setAttribute("download", "AK_Bookings_" + new Date().toISOString().split("T")[0] + ".csv");
+  link.style.visibility = "hidden";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function updateFilterButtons() {
@@ -630,6 +722,50 @@ function updateFilterButtons() {
   savedBtn.classList.toggle("active", showSaved);
   savedBtn.setAttribute("aria-pressed", showSaved ? "true" : "false");
   savedBtn.textContent = "♥ Saved (" + favorites.length + ")";
+}
+
+// ---------- Dashboard Functions ----------
+function getRecentEvents() {
+  return recentlyViewed
+    .map(findEvent)
+    .filter(function (event) { return event !== undefined; });
+}
+
+function updateDashboard() {
+  if (!totalBookingsCount || !upcomingEventsCount || !cancelledBookingsCount || !totalAmountSpent) {
+    return;
+  }
+
+  var confirmedBookings = bookings.filter(function (b) { return b.status === "Confirmed"; });
+  var cancelledBookings = bookings.filter(function (b) { return b.status === "Cancelled"; });
+
+  var totalAmount = confirmedBookings.reduce(function (sum, b) { return sum + b.totalAmount; }, 0);
+
+  totalBookingsCount.textContent = bookings.length;
+  upcomingEventsCount.textContent = confirmedBookings.length;
+  cancelledBookingsCount.textContent = cancelledBookings.length;
+  totalAmountSpent.textContent = formatPrice(totalAmount);
+
+  renderDashboardRecentlyViewed();
+}
+
+function renderDashboardRecentlyViewed() {
+  if (!dashboardRecentlyViewed || !noDashboardRecentlyViewed) {
+    return;
+  }
+
+  var recentEvents = getRecentEvents();
+
+  if (recentEvents.length === 0) {
+    dashboardRecentlyViewed.innerHTML = "";
+    noDashboardRecentlyViewed.hidden = false;
+    return;
+  }
+
+  noDashboardRecentlyViewed.hidden = true;
+
+  dashboardRecentlyViewed.innerHTML = recentEvents.map(createEventCard).join("");
+  refreshScrollEffects();
 }
 
 // ---------- Update Category Counts ----------
@@ -692,7 +828,7 @@ function createEventCard(event) {
   var isSaved = favorites.includes(event.id);
 
   return (
-    '<article class="event-card">' +
+    '<article class="event-card reveal">' +
       '<div class="card-image">' +
         '<img src="' + event.image + '" alt="' + event.title + '" loading="lazy">' +
         '<span class="category-badge">' + event.category + '</span>' +
@@ -727,6 +863,7 @@ function renderEvents() {
 
   updateFilterButtons();
   updateEventCount(filteredEvents.length);
+  refreshScrollEffects();
 }
 
 // Task 3: Display total number of events currently shown
@@ -741,7 +878,7 @@ function renderTrending() {
   trendingGrid.innerHTML = trending
     .map(function (event, index) {
       return (
-        '<article class="trend-card">' +
+        '<article class="trend-card reveal">' +
           '<div class="trend-image">' +
             '<img src="' + event.image + '" alt="' + event.title + '" loading="lazy">' +
             '<span class="rank-badge">#' + (index + 1) + ' Trending</span>' +
@@ -760,6 +897,7 @@ function renderTrending() {
       );
     })
     .join("");
+  refreshScrollEffects();
 }
 
 function renderRecentlyViewed() {
@@ -767,16 +905,7 @@ function renderRecentlyViewed() {
     return;
   }
 
-  // Get the events corresponding to recently viewed IDs
-  var recentEvents = recentlyViewed
-    .map(function (id) {
-      return allEvents.find(function (event) {
-        return event.id === id;
-      });
-    })
-    .filter(function (event) {
-      return event !== undefined;
-    });
+  var recentEvents = getRecentEvents();
 
   // Show or hide the section based on whether there are recently viewed events
   if (recentEvents.length === 0) {
@@ -786,30 +915,8 @@ function renderRecentlyViewed() {
 
   recentlyViewedSection.hidden = false;
 
-  recentlyViewedGrid.innerHTML = recentEvents
-    .map(function (event) {
-      var isSaved = favorites.includes(event.id);
-      return (
-        '<article class="event-card">' +
-          '<div class="card-image">' +
-            '<img src="' + event.image + '" alt="' + event.title + '" loading="lazy">' +
-            '<span class="category-badge">' + event.category + '</span>' +
-            '<button class="fav-btn ' + (isSaved ? "active" : "") + '" type="button" ' +
-              'data-fav="' + event.id + '" aria-label="Save ' + event.title + '" aria-pressed="' + isSaved + '">♥</button>' +
-          '</div>' +
-          '<div class="card-body">' +
-            '<h3>' + event.title + '</h3>' +
-            '<p class="meta">📅 ' + event.date + ' · ' + event.time + '</p>' +
-            '<p class="meta">📍 ' + event.venue + ', ' + event.location + '</p>' +
-            '<div class="card-footer">' +
-              '<span class="price">' + formatPrice(event.price) + '</span>' +
-              '<button class="btn btn-small" type="button" data-details="' + event.id + '">View Details</button>' +
-            '</div>' +
-          '</div>' +
-        '</article>'
-      );
-    })
-    .join("");
+  recentlyViewedGrid.innerHTML = recentEvents.map(createEventCard).join("");
+  refreshScrollEffects();
 }
 
 // ---------- Modal ----------
@@ -827,9 +934,7 @@ function resetModal() {
 }
 
 function openModal(id) {
-  var event = allEvents.find(function (item) {
-    return item.id === id;
-  });
+  var event = findEvent(id);
 
   if (!event) {
     return;
@@ -863,6 +968,23 @@ function closeModal() {
   resetModal();
 }
 
+function openConfirmModal(icon, title, message, okLabel, action) {
+  confirmIcon.textContent = icon;
+  confirmTitle.textContent = title;
+  confirmMessage.textContent = message;
+  confirmOk.textContent = okLabel;
+  confirmAction = action;
+  confirmModal.classList.add("open");
+  document.body.style.overflow = "hidden";
+  confirmOk.focus();
+}
+
+function closeConfirmModal() {
+  confirmModal.classList.remove("open");
+  document.body.style.overflow = modal.classList.contains("open") ? "hidden" : "";
+  confirmAction = null;
+}
+
 function openRegisterPanel() {
   // Check if user is logged in
   if (!currentUser) {
@@ -888,9 +1010,7 @@ function openRegisterPanel() {
     return;
   }
 
-  var event = allEvents.find(function (item) {
-    return item.id === currentEventId;
-  });
+  var event = findEvent(currentEventId);
 
   if (!event) {
     return;
@@ -1012,13 +1132,7 @@ function updateAuthUI() {
 
 function saveUser(user) {
   currentUser = user;
-
-  try {
-    localStorage.setItem("akUser", JSON.stringify(user));
-  } catch (error) {
-    // localStorage may be blocked in some browsers.
-  }
-
+  saveStore("akUser", user);
   updateAuthUI();
 }
 
@@ -1200,12 +1314,45 @@ document.addEventListener("click", function (event) {
 
   if (cancelButton) {
     var bookingId = cancelButton.dataset.cancelBooking;
-    var confirmed = confirm("Are you sure you want to cancel this booking?");
-
-    if (confirmed) {
-      cancelBooking(bookingId);
-    }
+    openConfirmModal(
+      "⚠️",
+      "Cancel this booking?",
+      "This booking will be marked as cancelled. You can delete it later.",
+      "Yes, cancel it",
+      function () { cancelBooking(bookingId); }
+    );
+    return;
   }
+
+  var editButton = event.target.closest("[data-edit-booking]");
+  if (editButton) {
+    openEditBookingModal(editButton.dataset.editBooking);
+  }
+
+  var deleteButton = event.target.closest("[data-delete-booking]");
+  if (deleteButton) {
+    var delBookingId = deleteButton.dataset.deleteBooking;
+    openConfirmModal(
+      "🗑️",
+      "Delete this booking?",
+      "This booking will be permanently removed and cannot be recovered.",
+      "Yes, delete it",
+      function () { deleteBooking(delBookingId); }
+    );
+  }
+});
+
+confirmClose.addEventListener("click", closeConfirmModal);
+confirmCancelBtn.addEventListener("click", closeConfirmModal);
+confirmModal.addEventListener("click", function (event) {
+  if (event.target === confirmModal) {
+    closeConfirmModal();
+  }
+});
+confirmOk.addEventListener("click", function () {
+  var action = confirmAction;
+  closeConfirmModal();
+  if (action) action();
 });
 
 modalClose.addEventListener("click", closeModal);
@@ -1227,6 +1374,10 @@ document.addEventListener("keydown", function (event) {
 
   if (authModal.classList.contains("open")) {
     closeAuthModal();
+  }
+
+  if (confirmModal.classList.contains("open")) {
+    closeConfirmModal();
   }
 });
 
@@ -1271,9 +1422,7 @@ registerForm.addEventListener("submit", function (event) {
     return;
   }
 
-  var selectedEvent = allEvents.find(function (item) {
-    return item.id === currentEventId;
-  });
+  var selectedEvent = findEvent(currentEventId);
   var ticketCount = Number(regTickets.value);
   var ticketText = ticketCount === 1 ? "1 ticket" : ticketCount + " tickets";
 
@@ -1342,16 +1491,122 @@ navMenu.querySelectorAll("a").forEach(function (link) {
   });
 });
 
-// ---------- Header scroll effect ----------
-window.addEventListener("scroll", function () {
-  var header = document.querySelector(".header");
+// ---------- Scroll effects (sticky decks, reveal on scroll, progress) ----------
+var scrollDecks = Array.prototype.slice.call(document.querySelectorAll("[data-deck='sticky']"));
+var headerEl = document.querySelector(".header");
+var revealObserver = null;
+var scrollTicking = false;
+var lastScrollY = window.scrollY;
+var lastScrollTime = performance.now();
+var scrollSway = 0;
+var swayDecaying = false;
 
-  if (window.scrollY > 10) {
-    header.classList.add("scrolled");
-  } else {
-    header.classList.remove("scrolled");
+function clampValue(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function sizeDecks() {
+  var viewportHeight = window.innerHeight;
+  var offset = headerEl ? headerEl.offsetHeight : 68;
+
+  scrollDecks.forEach(function (deck) {
+    if (deck.hidden) return;
+
+    var height = deck.offsetHeight;
+    // Short decks pin under the header. Tall decks scroll normally until
+    // their bottom reaches the bottom of the screen, then they pin there.
+    deck.style.top = Math.min(offset, viewportHeight - height) + "px";
+  });
+}
+
+function updateScrollProgress() {
+  var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  var progress = maxScroll > 0 ? clampValue(window.scrollY / maxScroll, 0, 1) : 0;
+  document.documentElement.style.setProperty("--progress", progress.toFixed(3));
+}
+
+function observeReveals() {
+  var items = document.querySelectorAll(".reveal:not(.in-view)");
+
+  if (!("IntersectionObserver" in window)) {
+    items.forEach(function (item) { item.classList.add("in-view"); });
+    return;
   }
-});
+
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+  }
+
+  items.forEach(function (item) { revealObserver.observe(item); });
+}
+
+function refreshScrollEffects() {
+  sizeDecks();
+  observeReveals();
+  updateScrollProgress();
+}
+
+function decaySway() {
+  scrollSway *= 0.88;
+  document.documentElement.style.setProperty("--sw", scrollSway.toFixed(2));
+
+  if (Math.abs(scrollSway) > 0.05) {
+    requestAnimationFrame(decaySway);
+  } else {
+    swayDecaying = false;
+  }
+}
+
+function onScrollFrame() {
+  scrollTicking = false;
+
+  var y = window.scrollY;
+  headerEl.classList.toggle("scrolled", y > 10);
+
+  var now = performance.now();
+  var elapsed = Math.max(8, now - lastScrollTime);
+  var velocity = ((y - lastScrollY) / elapsed) * 16;
+
+  lastScrollY = y;
+  lastScrollTime = now;
+
+  scrollSway += (clampValue(velocity, -14, 14) - scrollSway) * 0.18;
+  scrollSway *= 0.88;
+  document.documentElement.style.setProperty("--sw", scrollSway.toFixed(2));
+
+  if (!swayDecaying && Math.abs(scrollSway) > 0.05) {
+    swayDecaying = true;
+    requestAnimationFrame(decaySway);
+  }
+
+  updateScrollProgress();
+}
+
+window.addEventListener("scroll", function () {
+  if (!scrollTicking) {
+    scrollTicking = true;
+    requestAnimationFrame(onScrollFrame);
+  }
+}, { passive: true });
+
+window.addEventListener("resize", sizeDecks);
+window.addEventListener("load", refreshScrollEffects);
+
+if ("ResizeObserver" in window) {
+  var deckResizeObserver = new ResizeObserver(function () { sizeDecks(); });
+  scrollDecks.forEach(function (deck) { deckResizeObserver.observe(deck); });
+}
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(refreshScrollEffects);
+}
 
 // ---------- Login / Signup ----------
 loginBtn.addEventListener("click", function () {
@@ -1456,10 +1711,132 @@ signupForm.addEventListener("submit", function (event) {
   showAuthSuccessMessage("Account created. Welcome to AK, " + name + "!");
 });
 
+// ---------- Edit Booking Modal Functions ----------
+function openEditBookingModal(bookingId) {
+  var booking = bookings.find(function (b) { return b.id === bookingId; });
+  if (!booking) return;
+
+  editBookingId.value = booking.id;
+  editName.value = booking.customerName;
+  editEmail.value = booking.customerEmail;
+  editPhone.value = booking.customerPhone;
+  editTickets.value = booking.ticketCount;
+  editBookingSubtitle.textContent = "Editing booking for " + booking.eventTitle;
+
+  // Update summary
+  editSummaryTicketPrice.textContent = formatPrice(booking.ticketPrice);
+  editSummaryQuantity.textContent = booking.ticketCount;
+  editSummaryTotal.textContent = formatPrice(booking.totalAmount);
+
+  editBookingModal.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeEditBookingModal() {
+  editBookingModal.classList.remove("open");
+  document.body.style.overflow = "";
+  editBookingForm.reset();
+  editBookingFields.forEach(function (field) {
+    setFieldError(field.input, field.error, "");
+  });
+}
+
+function updateEditBookingSummary() {
+  var bookingId = editBookingId.value;
+  var booking = bookings.find(function (b) { return b.id === bookingId; });
+  if (!booking) return;
+
+  var ticketCount = Number(editTickets.value);
+  editSummaryQuantity.textContent = ticketCount;
+  editSummaryTotal.textContent = formatPrice(booking.ticketPrice * ticketCount);
+}
+
+editBookingClose.addEventListener("click", closeEditBookingModal);
+editBookingModal.addEventListener("click", function (event) {
+  if (event.target === editBookingModal) {
+    closeEditBookingModal();
+  }
+});
+
+editTickets.addEventListener("change", updateEditBookingSummary);
+
+editBookingForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  var nameError = validateName(editName.value);
+  var emailError = validateEmail(editEmail.value);
+  var phoneError = validatePhone(editPhone.value);
+  var ticketsError = validateTickets(editTickets.value);
+
+  setFieldError(editName, editNameError, nameError);
+  setFieldError(editEmail, editEmailError, emailError);
+  setFieldError(editPhone, editPhoneError, phoneError);
+  setFieldError(editTickets, editTicketsError, ticketsError);
+
+  if (nameError || emailError || phoneError || ticketsError) {
+    return;
+  }
+
+  var bookingId = editBookingId.value;
+  var updatedName = editName.value.trim();
+  var updatedEmail = editEmail.value.trim();
+  var updatedPhone = editPhone.value.trim();
+  var updatedTickets = Number(editTickets.value);
+
+  editBooking(bookingId, updatedName, updatedEmail, updatedPhone, updatedTickets);
+  closeEditBookingModal();
+  renderBookings();
+  updateDashboard();
+});
+
+// ---------- Bookings Search & Filter ----------
+var bookingSearchTimeout = null;
+
+if (bookingSearchInput) {
+  bookingSearchInput.addEventListener("input", function () {
+    clearTimeout(bookingSearchTimeout);
+    bookingSearchTimeout = setTimeout(function () {
+      bookingSearchTerm = bookingSearchInput.value.trim().toLowerCase();
+      renderBookings();
+    }, 300);
+  });
+}
+
+if (filterAllBookings) {
+  filterAllBookings.addEventListener("click", function () {
+    bookingStatusFilter = "all";
+    updateBookingFilterButtons();
+    renderBookings();
+  });
+}
+
+if (filterConfirmedBookings) {
+  filterConfirmedBookings.addEventListener("click", function () {
+    bookingStatusFilter = "confirmed";
+    updateBookingFilterButtons();
+    renderBookings();
+  });
+}
+
+if (filterCancelledBookings) {
+  filterCancelledBookings.addEventListener("click", function () {
+    bookingStatusFilter = "cancelled";
+    updateBookingFilterButtons();
+    renderBookings();
+  });
+}
+
+if (exportBookingsCSV) {
+  exportBookingsCSV.addEventListener("click", exportBookingsToCSV);
+}
+
 // ---------- Start ----------
 updateAuthUI();
 renderEvents();
 renderTrending();
 renderRecentlyViewed();
 renderBookings();
+updateDashboard();
 updateCategoryCounts();
+updateBookingFilterButtons();
+refreshScrollEffects();
